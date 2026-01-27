@@ -1,0 +1,352 @@
+@model ITTicketingSystem.Models.CreateTicketViewModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Create New Ticket";
+}
+
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IT Ticketing System - Create Ticket</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#205964",
+                        "background-light": "#fafafa",
+                        "background-dark": "#272b30",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav {
+            background-color: #205964;
+            color: white !important;
+        }
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+        .rte-mockup {
+            min-height: 200px;
+        }
+        .validation-error {
+            color: #dc2626;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-800 dark:text-slate-200">
+<div class="flex min-h-screen">
+<aside class="fixed inset-y-0 left-0 w-64 bg-[#101719] text-white z-50 flex flex-col">
+<div class="p-6 flex items-center gap-3">
+<div class="size-8 bg-primary rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-white">confirmation_number</span>
+</div>
+<h1 class="text-xl font-extrabold tracking-tight">IT CORE</h1>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-1 sidebar-scroll overflow-y-auto">
+<p class="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Main Menu</p>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-colors" href="@Url.Action("Index", "Home")">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg active-nav transition-colors" href="@Url.Action("Create", "Ticket")">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="text-sm font-medium">Create Ticket</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-colors" href="@Url.Action("MyTickets", "Ticket")">
+<span class="material-symbols-outlined">confirmation_number</span>
+<span class="text-sm font-medium">My Tickets</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-colors" href="@Url.Action("AssignedTickets", "Ticket")">
+<span class="material-symbols-outlined">assignment_ind</span>
+<span class="text-sm font-medium">Assigned Tickets</span>
+</a>
+<p class="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider mt-6 mb-2">Management</p>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="text-sm font-medium">Team Overview</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-sm font-medium">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<span class="text-sm font-medium">Notifications</span>
+<span class="ml-auto bg-primary text-[10px] px-1.5 py-0.5 rounded-full">12</span>
+</a>
+<p class="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider mt-6 mb-2">System</p>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-sm font-medium">Profile</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-white/10">
+<form asp-area="" asp-controller="Account" asp-action="Logout" method="post" class="inline">
+@Html.AntiForgeryToken()
+<button type="submit" class="flex w-full items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-500/10 text-red-400 transition-colors">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-sm font-medium">Logout</span>
+</button>
+</form>
+</div>
+</aside>
+<main class="flex-1 ml-64 min-h-screen">
+<header class="sticky top-0 z-40 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 px-8 py-4">
+<div class="flex items-center justify-between gap-8">
+<div class="flex items-center gap-4 flex-1">
+<label class="relative w-full max-w-md text-slate-400">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</span>
+<input class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-lg py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/50 transition-all placeholder:text-slate-500 text-slate-900 dark:text-white" placeholder="Search tickets..." type="text"/>
+</label>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<div class="h-8 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="text-xs font-bold leading-none">@User.Identity?.Name</p>
+<p class="text-[10px] text-slate-500">IT Manager</p>
+</div>
+<div class="size-9 rounded-full bg-slate-200 bg-cover bg-center border-2 border-primary/20" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuANoJb5O3rxhZXSZrehTz-0TP3VivqQ2XBcoLZkm2Pt1_Nf0xSS4oSSfp1zg2RcN_UuX8JM6ZuorVHtlMVLd1k9xsq-oUUeHmkuNrCuYV5olzk_vmvMx_zg6C-XwqoKPNMpWualzPyCcSQ3CFhvVt4Ab61MKS06gI2uAyunb-hsvNsuA9EZ_K4J_I6Y8E-OqtZkjjuKexc_mf-Gx1IoPY1RTMGFiiys933H6c8dr_llbOVJ95eEKhPIInkUTb84kDwoEE1Gg74V7WJa')"></div>
+</div>
+</div>
+</div>
+</header>
+<div class="p-8 max-w-4xl mx-auto">
+<div class="flex flex-col gap-1 mb-8">
+<h2 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">Create New Ticket</h2>
+<p class="text-slate-500 text-sm">Fill out the details below to submit a new service request to the IT team.</p>
+</div>
+
+<!-- Error Message -->
+@if (Model.ShowError)
+{
+    <div class="mb-6 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-center gap-3">
+        <span class="material-symbols-outlined text-red-500 text-xl">error</span>
+        <p class="text-red-700 dark:text-red-400 text-sm">@Model.ErrorMessage</p>
+    </div>
+}
+
+<!-- Success Message -->
+@if (TempData["Success"] != null)
+{
+    <div class="mb-6 p-3 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg flex items-center gap-3">
+        <span class="material-symbols-outlined text-emerald-500 text-xl">check_circle</span>
+        <p class="text-emerald-700 dark:text-emerald-400 text-sm">@TempData["Success"]</p>
+    </div>
+}
+
+<form asp-action="Create" method="post" enctype="multipart/form-data" class="space-y-6">
+    @Html.AntiForgeryToken()
+    
+    <div class="space-y-2">
+        <label asp-for="Subject" class="text-sm font-bold text-slate-700 dark:text-slate-300"></label>
+        <input asp-for="Subject" 
+               class="w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg py-2.5 px-4 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all text-slate-900 dark:text-white placeholder:text-slate-400" 
+               placeholder="e.g., Cannot access internal VPN from remote office" 
+               type="text"/>
+        <span asp-validation-for="Subject" class="validation-error"></span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="space-y-2">
+            <label asp-for="Department" class="text-sm font-bold text-slate-700 dark:text-slate-300"></label>
+            <select asp-for="Department" 
+                    class="w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg py-2.5 px-4 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all text-slate-900 dark:text-white">
+                <option value="">Select Department</option>
+                <option value="hr">Human Resources</option>
+                <option value="engineering">Engineering</option>
+                <option value="finance">Finance</option>
+                <option value="marketing">Marketing</option>
+                <option value="sales">Sales</option>
+            </select>
+        </div>
+        <div class="space-y-2">
+            <label asp-for="Category" class="text-sm font-bold text-slate-700 dark:text-slate-300"></label>
+            <select asp-for="Category" 
+                    class="w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg py-2.5 px-4 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all text-slate-900 dark:text-white">
+                <option value="">Select Category</option>
+                <option value="hardware">Hardware Issue</option>
+                <option value="software">Software / Application</option>
+                <option value="network">Network & Connectivity</option>
+                <option value="access">Access & Permissions</option>
+                <option value="other">General Request</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="space-y-3">
+        <label asp-for="Priority" class="text-sm font-bold text-slate-700 dark:text-slate-300"></label>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <label class="relative flex items-center justify-center p-3 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                <input asp-for="Priority" class="sr-only peer" type="radio" value="low"/>
+                <span class="text-xs font-bold text-slate-500 peer-checked:text-primary dark:peer-checked:text-emerald-400">Low</span>
+                <div class="absolute inset-0 border-2 border-transparent peer-checked:border-primary dark:peer-checked:border-primary rounded-lg pointer-events-none"></div>
+            </label>
+            <label class="relative flex items-center justify-center p-3 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                <input asp-for="Priority" class="sr-only peer" type="radio" value="medium" checked/>
+                <span class="text-xs font-bold text-slate-500 peer-checked:text-primary dark:peer-checked:text-blue-400">Medium</span>
+                <div class="absolute inset-0 border-2 border-transparent peer-checked:border-primary dark:peer-checked:border-primary rounded-lg pointer-events-none"></div>
+            </label>
+            <label class="relative flex items-center justify-center p-3 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                <input asp-for="Priority" class="sr-only peer" type="radio" value="high"/>
+                <span class="text-xs font-bold text-slate-500 peer-checked:text-primary dark:peer-checked:text-orange-400">High</span>
+                <div class="absolute inset-0 border-2 border-transparent peer-checked:border-primary dark:peer-checked:border-primary rounded-lg pointer-events-none"></div>
+            </label>
+            <label class="relative flex items-center justify-center p-3 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                <input asp-for="Priority" class="sr-only peer" type="radio" value="critical"/>
+                <span class="text-xs font-bold text-slate-500 peer-checked:text-primary dark:peer-checked:text-red-500">Critical</span>
+                <div class="absolute inset-0 border-2 border-transparent peer-checked:border-primary dark:peer-checked:border-primary rounded-lg pointer-events-none"></div>
+            </label>
+        </div>
+        <span asp-validation-for="Priority" class="validation-error"></span>
+    </div>
+
+    <div class="space-y-2">
+        <label asp-for="Description" class="text-sm font-bold text-slate-700 dark:text-slate-300"></label>
+        <div class="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-primary/50 transition-all">
+            <div class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-700 px-3 py-2 flex items-center gap-1">
+                <button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400" type="button">
+                    <span class="material-symbols-outlined text-[18px]">format_bold</span>
+                </button>
+                <button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400" type="button">
+                    <span class="material-symbols-outlined text-[18px]">format_italic</span>
+                </button>
+                <button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400" type="button">
+                    <span class="material-symbols-outlined text-[18px]">format_underlined</span>
+                </button>
+                <div class="w-px h-4 bg-slate-300 dark:bg-slate-600 mx-1"></div>
+                <button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400" type="button">
+                    <span class="material-symbols-outlined text-[18px]">format_list_bulleted</span>
+                </button>
+                <button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400" type="button">
+                    <span class="material-symbols-outlined text-[18px]">format_list_numbered</span>
+                </button>
+                <div class="w-px h-4 bg-slate-300 dark:bg-slate-600 mx-1"></div>
+                <button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400" type="button">
+                    <span class="material-symbols-outlined text-[18px]">link</span>
+                </button>
+                <button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400" type="button">
+                    <span class="material-symbols-outlined text-[18px]">image</span>
+                </button>
+                <button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400" type="button">
+                    <span class="material-symbols-outlined text-[18px]">code</span>
+                </button>
+            </div>
+            <textarea asp-for="Description" 
+                      class="w-full bg-white dark:bg-slate-800 border-none p-4 text-sm focus:ring-0 min-h-[200px] text-slate-900 dark:text-white placeholder:text-slate-400" 
+                      placeholder="Please provide as much information as possible, including screenshots if applicable..."></textarea>
+        </div>
+        <span asp-validation-for="Description" class="validation-error"></span>
+    </div>
+
+    <div class="space-y-2">
+        <label asp-for="Attachments" class="text-sm font-bold text-slate-700 dark:text-slate-300"></label>
+        <div class="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-8 flex flex-col items-center justify-center gap-3 bg-slate-50/50 dark:bg-slate-800/30 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group cursor-pointer">
+            <div class="size-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined">cloud_upload</span>
+            </div>
+            <div class="text-center">
+                <p class="text-sm font-bold text-slate-900 dark:text-white">Click to upload or drag and drop</p>
+                <p class="text-xs text-slate-500 mt-1">Maximum file size: 25MB (Images, PDFs, Logs)</p>
+            </div>
+            <input asp-for="Attachments" class="hidden" multiple type="file"/>
+        </div>
+    </div>
+
+    <div class="flex items-center justify-end gap-4 pt-4 border-t border-slate-200 dark:border-slate-700 mt-8">
+        <a href="@Url.Action("MyTickets", "Ticket")" class="px-6 py-2.5 rounded-lg text-sm font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            Discard
+        </a>
+        <button type="submit" class="px-8 py-2.5 bg-primary text-white rounded-lg text-sm font-bold shadow-lg hover:bg-primary/90 transition-all flex items-center gap-2">
+            <span class="material-symbols-outlined text-[20px]">send</span>
+            Submit Ticket
+        </button>
+    </div>
+</form>
+
+<div class="flex flex-wrap items-center justify-between gap-4 py-8 mt-8 border-t border-slate-200 dark:border-slate-700">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="size-2 rounded-full bg-emerald-500"></span>
+<span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Support Core: Online</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Average Response: ~2h</span>
+</div>
+</div>
+<p class="text-xs text-slate-400">© 2024 Enterprise IT Ticketing v4.2.0</p>
+</div>
+</div>
+</main>
+</div>
+
+<script>
+    // Handle file upload click
+    document.querySelector('.border-dashed').addEventListener('click', function() {
+        document.querySelector('input[type="file"]').click();
+    });
+
+    // Handle drag and drop
+    const dropZone = document.querySelector('.border-dashed');
+    
+    dropZone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.classList.add('bg-slate-100', 'dark:bg-slate-700');
+    });
+    
+    dropZone.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        this.classList.remove('bg-slate-100', 'dark:bg-slate-700');
+    });
+    
+    dropZone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('bg-slate-100', 'dark:bg-slate-700');
+        
+        const files = e.dataTransfer.files;
+        document.querySelector('input[type="file"]').files = files;
+        
+        // Update UI to show selected files
+        const fileNames = Array.from(files).map(f => f.name).join(', ');
+        const fileNameDisplay = this.querySelector('.text-center p:first-child');
+        if (files.length > 0) {
+            fileNameDisplay.textContent = `${files.length} file(s) selected: ${fileNames}`;
+        }
+    });
+</script>
+</body>
+</html>

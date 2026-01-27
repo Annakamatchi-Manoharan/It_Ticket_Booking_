@@ -1,0 +1,208 @@
+@model ITTicketingSystem.Models.LoginViewModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Zenith IT - Login";
+}
+
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1392ec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101a22",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .validation-error {
+            color: #dc2626;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex items-center justify-center font-display">
+<div class="flex w-full min-h-screen flex-col md:flex-row">
+<!-- Left Side: Branding and Hero Visual -->
+<div class="hidden md:flex w-1/2 relative bg-primary items-center justify-center p-12 overflow-hidden">
+<!-- Decorative geometric pattern overlay -->
+<div class="absolute inset-0 opacity-20 pointer-events-none" data-alt="Abstract geometric dot pattern background" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;"></div>
+<div class="relative z-10 max-w-lg text-white">
+<div class="mb-8 flex items-center gap-3">
+<div class="bg-white p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary text-3xl">terminal</span>
+</div>
+<span class="text-2xl font-black tracking-tight">Zenith IT</span>
+</div>
+<h1 class="text-5xl font-black leading-tight tracking-[-0.033em] mb-6">
+                    Empowering your IT workflow
+                </h1>
+<p class="text-white/80 text-lg font-normal leading-relaxed">
+                    The unified platform for enterprise technology management and seamless ticket resolution. Secure, scalable, and built for modern teams.
+                </p>
+<div class="mt-12 flex gap-4">
+<div class="flex flex-col gap-1">
+<span class="text-3xl font-bold">99.9%</span>
+<span class="text-sm text-white/60 uppercase tracking-widest">Uptime</span>
+</div>
+<div class="w-px h-12 bg-white/20 mx-4"></div>
+<div class="flex flex-col gap-1">
+<span class="text-3xl font-bold">24/7</span>
+<span class="text-sm text-white/60 uppercase tracking-widest">Support</span>
+</div>
+</div>
+</div>
+<!-- Abstract Graphic element -->
+<div class="absolute -bottom-20 -right-20 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
+<div class="absolute top-10 left-10 w-40 h-40 bg-white/5 rounded-full blur-2xl"></div>
+</div>
+<!-- Right Side: Login Panel -->
+<div class="flex-1 flex flex-col justify-center items-center bg-white dark:bg-background-dark px-6 py-12">
+<div class="w-full max-w-[440px]">
+<!-- Logo for mobile -->
+<div class="md:hidden flex items-center gap-2 mb-8 justify-center">
+<span class="material-symbols-outlined text-primary text-3xl">terminal</span>
+<span class="text-xl font-black tracking-tight dark:text-white">Zenith IT</span>
+</div>
+<!-- Header -->
+<div class="mb-8 px-4">
+<h2 class="text-[#0d161b] dark:text-white text-3xl font-bold leading-tight tracking-[-0.015em] mb-2">Sign In</h2>
+<p class="text-[#4c799a] dark:text-slate-400 text-base font-normal">Enter your credentials to access your dashboard.</p>
+</div>
+
+<!-- Error Message -->
+@if (Model.ShowError)
+{
+    <div class="mb-6 mx-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-center gap-3">
+        <span class="material-symbols-outlined text-red-500 text-xl">error</span>
+        <p class="text-red-700 dark:text-red-400 text-sm">@Model.ErrorMessage</p>
+    </div>
+}
+
+<!-- Validation Summary -->
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="mb-6 mx-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+        <div asp-validation-summary="All" class="text-red-700 dark:text-red-400 text-sm"></div>
+    </div>
+}
+
+<!-- Login Form -->
+<form asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="space-y-4">
+    @Html.AntiForgeryToken()
+    
+    <!-- Email Field -->
+    <div class="px-4 py-3">
+        <label class="flex flex-col w-full">
+            <p class="text-[#0d161b] dark:text-slate-200 text-sm font-semibold leading-normal pb-2">Email Address</p>
+            <div class="relative">
+                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#4c799a]">mail</span>
+                <input asp-for="Email" 
+                       class="form-input flex w-full rounded-lg text-[#0d161b] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-[#cfdde7] dark:border-slate-700 bg-white dark:bg-slate-900 h-14 placeholder:text-[#4c799a] pl-12 pr-4 text-base font-normal leading-normal" 
+                       placeholder="e.g., name@company.com" 
+                       type="email"/>
+            </div>
+            <span asp-validation-for="Email" class="validation-error"></span>
+        </label>
+    </div>
+
+    <!-- Password Field -->
+    <div class="px-4 py-3">
+        <label class="flex flex-col w-full">
+            <div class="flex justify-between items-center pb-2">
+                <p class="text-[#0d161b] dark:text-slate-200 text-sm font-semibold leading-normal">Password</p>
+                <a class="text-primary text-sm font-bold hover:underline" href="#">Forgot Password?</a>
+            </div>
+            <div class="flex w-full items-stretch rounded-lg group">
+                <div class="relative w-full">
+                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#4c799a]">lock</span>
+                    <input asp-for="Password" 
+                           class="form-input flex w-full rounded-lg text-[#0d161b] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-[#cfdde7] dark:border-slate-700 bg-white dark:bg-slate-900 h-14 placeholder:text-[#4c799a] pl-12 pr-12 text-base font-normal leading-normal" 
+                           placeholder="••••••••" 
+                           type="password"
+                           id="passwordInput"/>
+                    <button class="absolute right-4 top-1/2 -translate-y-1/2 text-[#4c799a] hover:text-primary" type="button" onclick="togglePassword()">
+                        <span class="material-symbols-outlined" id="passwordToggle">visibility</span>
+                    </button>
+                </div>
+            </div>
+            <span asp-validation-for="Password" class="validation-error"></span>
+        </label>
+    </div>
+
+    <!-- Remember Me -->
+    <div class="px-4 flex items-center gap-2">
+        <input asp-for="RememberMe" 
+               class="w-5 h-5 rounded border-[#cfdde7] text-primary focus:ring-primary" 
+               type="checkbox"/>
+        <label asp-for="RememberMe" class="text-sm text-[#4c799a] dark:text-slate-400 font-medium cursor-pointer">Remember this device</label>
+    </div>
+
+    <!-- Action Button -->
+    <div class="px-4 pt-4">
+        <button class="w-full flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20" 
+                type="submit">
+            <span class="truncate">Login to Dashboard</span>
+        </button>
+    </div>
+</form>
+
+<!-- Footer Links -->
+<div class="mt-10 px-4 text-center">
+<p class="text-[#4c799a] dark:text-slate-400 text-sm">
+                    Don't have an account? 
+                    <a class="text-primary font-bold hover:underline" href="#">Contact Administrator</a>
+</p>
+<div class="mt-8 flex justify-center gap-6">
+<a class="text-[#4c799a] hover:text-primary text-xs font-medium uppercase tracking-widest" href="#">Privacy Policy</a>
+<a class="text-[#4c799a] hover:text-primary text-xs font-medium uppercase tracking-widest" href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+    function togglePassword() {
+        const passwordInput = document.getElementById('passwordInput');
+        const passwordToggle = document.getElementById('passwordToggle');
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            passwordToggle.textContent = 'visibility_off';
+        } else {
+            passwordInput.type = 'password';
+            passwordToggle.textContent = 'visibility';
+        }
+    }
+</script>
+</body></html>

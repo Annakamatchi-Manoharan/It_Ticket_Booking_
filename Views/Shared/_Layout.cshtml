@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - IT Ticketing System</title>
+    <link href="https://cdn.tailwindcss.com" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&display=swap" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#20bfdf",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#111e21",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-white">
+    <header>
+        <nav class="bg-white dark:bg-gray-800 shadow-md">
+            <div class="container mx-auto px-4">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-4">
+                        <span class="material-symbols-outlined text-primary text-2xl">confirmation_number</span>
+                        <a class="text-xl font-bold text-gray-800 dark:text-white" asp-area="" asp-controller="Home" asp-action="Index">IT Ticketing System</a>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <span class="text-sm text-gray-600 dark:text-gray-300">Welcome, @User.Identity.Name</span>
+                            <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" class="inline">
+                                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                    Logout
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a asp-area="" asp-controller="Account" asp-action="Login" class="bg-primary hover:bg-[#1ba8c4] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                Login
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <main class="container mx-auto px-4 py-8">
+        @RenderBody()
+    </main>
+    
+    <footer class="bg-white dark:bg-gray-800 shadow-md mt-auto">
+        <div class="container mx-auto px-4 py-4">
+            <div class="text-center text-sm text-gray-600 dark:text-gray-400">
+                © 2024 Enterprise IT Solutions. All rights reserved.
+            </div>
+        </div>
+    </footer>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

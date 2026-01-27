@@ -1,4 +1,6 @@
-﻿using ITTicketingSystem.Web.Data;
+﻿using ITTicketingSystem.Data;
+using ITTicketingSystem.Repositories;
+using ITTicketingSystem.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -10,6 +12,13 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySQL(connectionString));
+
+// Repository Services
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+
+// Application Services
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 // MVC
 builder.Services.AddControllersWithViews();

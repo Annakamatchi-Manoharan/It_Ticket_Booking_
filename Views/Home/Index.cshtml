@@ -1,0 +1,47 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+        <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-4">
+            Welcome to IT Ticketing System
+        </h1>
+        <p class="text-gray-600 dark:text-gray-300 mb-6">
+            Manage and track your IT support tickets efficiently.
+        </p>
+        
+        <div class="mb-8">
+            <a href="@Url.Action("Create", "Ticket")" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-sm font-medium transition-colors">
+                <span class="material-symbols-outlined">add_circle</span>
+                Create New Ticket
+            </a>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800">
+                <div class="flex items-center mb-4">
+                    <span class="material-symbols-outlined text-blue-500 text-3xl mr-3">support_agent</span>
+                    <h2 class="text-xl font-semibold text-blue-800 dark:text-blue-200">Support Tickets</h2>
+                </div>
+                <p class="text-blue-600 dark:text-blue-300">Create and manage support requests</p>
+            </div>
+            
+            <div class="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg border border-green-200 dark:border-green-800">
+                <div class="flex items-center mb-4">
+                    <span class="material-symbols-outlined text-green-500 text-3xl mr-3">history</span>
+                    <h2 class="text-xl font-semibold text-green-800 dark:text-green-200">Ticket History</h2>
+                </div>
+                <p class="text-green-600 dark:text-green-300">View past and current tickets</p>
+            </div>
+            
+            <div class="bg-purple-50 dark:bg-purple-900/20 p-6 rounded-lg border border-purple-200 dark:border-purple-800">
+                <div class="flex items-center mb-4">
+                    <span class="material-symbols-outlined text-purple-500 text-3xl mr-3">settings</span>
+                    <h2 class="text-xl font-semibold text-purple-800 dark:text-purple-200">Settings</h2>
+                </div>
+                <p class="text-purple-600 dark:text-purple-300">Manage your account preferences</p>
+            </div>
+        </div>
+    </div>
+</div>
