@@ -4,6 +4,7 @@ using ITTicketingSystem.Models;
 using ITTicketingSystem.Repositories;
 using System.Security.Claims;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace ITTicketingSystem.Controllers
 {
@@ -53,12 +54,41 @@ namespace ITTicketingSystem.Controllers
                 ContactNumber = model.ContactNumber,
                 ContactEmail = model.ContactEmail,
                 CreatedById = userId,
-                Status = "Open"
+                Status = "Open",
+                CreatedAt = DateTime.Now // Use current application clock time
             };
 
             if (model.Attachments != null && model.Attachments.Count > 0)
             {
-                ticket.Attachments = string.Join(";", model.Attachments.Select(a => a.FileName));
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "tickets");
+                
+                // Ensure the directory exists
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+                
+                var savedFiles = new List<string>();
+                
+                foreach (var file in model.Attachments)
+                {
+                    if (file.Length > 0)
+                    {
+                        // Create a unique filename to avoid conflicts
+                        var uniqueFileName = $"{DateTime.Now:yyyyMMddHHmmss}_{file.FileName}";
+                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                        
+                        // Save the file
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await file.CopyToAsync(stream);
+                        }
+                        
+                        savedFiles.Add(uniqueFileName);
+                    }
+                }
+                
+                ticket.Attachments = string.Join(";", savedFiles);
             }
 
             await _ticketRepository.CreateAsync(ticket);
@@ -78,36 +108,36 @@ namespace ITTicketingSystem.Controllers
             }
 
             var allUserTickets = await _ticketRepository.GetByUserIdAsync(userId);
-            
+
             // Apply search filter
             if (!string.IsNullOrEmpty(search))
             {
-                allUserTickets = allUserTickets.Where(t => 
+                allUserTickets = allUserTickets.Where(t =>
                     t.Subject.Contains(search, StringComparison.OrdinalIgnoreCase) ||
                     t.Description.Contains(search, StringComparison.OrdinalIgnoreCase) ||
                     t.Department.Contains(search, StringComparison.OrdinalIgnoreCase) ||
                     t.Category.Contains(search, StringComparison.OrdinalIgnoreCase)
                 ).ToList();
             }
-            
+
             // Apply status filter
             if (status != "All")
             {
                 allUserTickets = allUserTickets.Where(t => t.Status == status).ToList();
             }
-            
+
             // Apply category filter
             if (category != "All")
             {
                 allUserTickets = allUserTickets.Where(t => t.Category == category).ToList();
             }
-            
+
             var totalCount = allUserTickets.Count();
             var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
-            
+
             // Ensure page is within valid range
             page = Math.Max(1, Math.Min(page, totalPages > 0 ? totalPages : 1));
-            
+
             var pagedTickets = allUserTickets
                 .OrderByDescending(t => t.CreatedAt)
                 .Skip((page - 1) * pageSize)
@@ -137,6 +167,105 @@ namespace ITTicketingSystem.Controllers
         public async Task<IActionResult> AssignedTickets()
         {
             return RedirectToAction("Dashboard", "Home");
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> UpdateTicket(int ticketId, string status, string priority, string department, string category, string subject, string description, string teamViewerId, string teamViewerPassword, string contactEmail, string contactNumber)
+        {
+            try
+            {
+                // Get the current user ID
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                
+                // Find the ticket
+                var ticket = await _ticketRepository.GetByIdAsync(ticketId);
+                if (ticket == null)
+                {
+                    return Json(new { success = false, message = "Ticket not found" });
+                }
+                
+                // Update ticket properties
+                ticket.Status = status;
+                ticket.Priority = priority;
+                ticket.Department = department;
+                ticket.Category = category;
+                ticket.Subject = subject;
+                ticket.Description = description;
+                ticket.TeamViewerId = teamViewerId;
+                ticket.TeamViewerPassword = teamViewerPassword;
+                ticket.ContactEmail = contactEmail;
+                ticket.ContactNumber = contactNumber;
+                
+                // Update the ticket
+                await _ticketRepository.UpdateAsync(ticket);
+                
+                return Json(new { success = true, message = "Ticket updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error updating ticket: " + ex.Message });
+            }
+        }
+
+        [Authorize]
+        public async Task<IActionResult> DownloadAttachment(string fileName)
+        {
+            try
+            {
+                // For now, we'll return a placeholder response
+                // In a real application, you would:
+                // 1. Validate the user has access to this ticket
+                // 2. Find the file in your storage system (wwwroot/uploads/tickets/)
+                // 3. Return the actual file
+
+                // For demonstration, return a simple file response
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "tickets", fileName);
+
+                if (System.IO.File.Exists(filePath))
+                {
+                    var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+                    var contentType = GetContentType(fileName);
+                    return File(fileBytes, contentType, fileName);
+                }
+                else
+                {
+                    // Return a placeholder file if the actual file doesn't exist
+                    var placeholderContent = $"Attachment file '{fileName}' would be downloaded here.\n\nIn a real application, this would be the actual file content.";
+                    var placeholderBytes = System.Text.Encoding.UTF8.GetBytes(placeholderContent);
+                    return File(placeholderBytes, "text/plain", $"{fileName}.txt");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the error and return a user-friendly message
+                return BadRequest("Unable to download attachment. Please contact support.");
+            }
+        }
+
+        private string GetContentType(string fileName)
+        {
+            var extension = Path.GetExtension(fileName).ToLowerInvariant();
+            return extension switch
+            {
+                ".pdf" => "application/pdf",
+                ".doc" => "application/msword",
+                ".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                ".txt" => "text/plain",
+                ".jpg" => "image/jpeg",
+                ".jpeg" => "image/jpeg",
+                ".png" => "image/png",
+                ".gif" => "image/gif",
+                ".svg" => "image/svg+xml",
+                ".log" => "text/plain",
+                ".zip" => "application/zip",
+                ".rar" => "application/x-rar-compressed",
+                ".xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                ".xls" => "application/vnd.ms-excel",
+                ".pptx" => "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                ".ppt" => "application/vnd.ms-powerpoint",
+                _ => "application/octet-stream"
+            };
         }
     }
 }

@@ -1,0 +1,208 @@
+@{
+    ViewData["Title"] = "User Dashboard";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>User Dashboard - IT Support Portal</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1392ec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101a22",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="flex h-screen overflow-hidden">
+    <!-- Consistent Sidebar -->
+    <aside class="w-72 flex-shrink-0 bg-[#0b1217] border-r border-slate-800 flex flex-col h-full">
+        <div class="p-6 flex items-center justify-between border-b border-slate-800">
+            <div class="flex items-center gap-3">
+                <div class="size-10 bg-primary rounded-lg flex items-center justify-center text-white">
+                    <span class="material-symbols-outlined text-2xl">confirmation_number</span>
+                </div>
+                <div>
+                    <h1 class="text-sm font-bold leading-tight">Enterprise IT</h1>
+                    <p class="text-[11px] text-slate-400 uppercase tracking-widest font-semibold">Support Suite</p>
+                </div>
+            </div>
+            <button class="text-slate-400 hover:text-white transition-colors">
+                <span class="material-symbols-outlined">menu_open</span>
+            </button>
+        </div>
+        <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-8 custom-scrollbar">
+            <div class="space-y-1">
+                <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Main</p>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary border border-primary/20" href="@Url.Action("Dashboard", "Home")">
+                    <span class="material-symbols-outlined text-[22px]">dashboard</span>
+                    <span class="text-sm font-medium">Dashboard</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all" href="@Url.Action("Create", "Ticket")">
+                    <span class="material-symbols-outlined text-[22px]">add_box</span>
+                    <span class="text-sm font-medium">Create Ticket</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all" href="@Url.Action("MyTickets", "Ticket")">
+                    <span class="material-symbols-outlined text-[22px]">label_important</span>
+                    <span class="text-sm font-medium">My Tickets</span>
+                </a>
+            </div>
+        </nav>
+        <div class="p-4 border-t border-slate-800 space-y-4">
+            <div class="flex items-center gap-3 px-2 py-3 rounded-xl bg-slate-900/50">
+                <div class="size-10 rounded-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuArhuNpL6O2HO3VaecONI9ePl8kTsrXfeTFI5LK7BzENiLP-8MRM6RBuVTDIjQMSQfhpE8tBT_LEQLts5hq7bbIl70G3Cn252z3Wnc9-tJDv82BhN9lMhi2XXG1KZBLvk6yfQlKqy6snvgzooimixBWl2G8IrX_8JGKn7z5cetYKnh-EVvTcbY3t5MUbyRglLNYoPZ86kfrcumsVneTPH4HLO47tpNHhav1ks5bHqx9iVh8NfBJNRTGCGkfYSZsoZHVZ5xcU2Dr1AVd')"></div>
+                <div class="flex-1 overflow-hidden">
+                    <p class="text-sm font-bold truncate">User</p>
+                    <p class="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">Standard User</p>
+                </div>
+                <a href="@Url.Action("Logout", "Account")" class="text-slate-500 hover:text-white transition-colors">
+                    <span class="material-symbols-outlined text-sm">logout</span>
+                </a>
+            </div>
+        </div>
+    </aside>
+    <main class="flex-1 flex flex-col bg-background-light dark:bg-background-dark overflow-hidden">
+        <header class="h-16 border-b border-slate-200 dark:border-slate-800 px-8 flex items-center justify-between bg-white dark:bg-[#101a22] z-10">
+            <div class="flex items-center gap-6">
+                <h2 class="text-lg font-bold tracking-tight">User Dashboard</h2>
+                <div class="h-6 w-px bg-slate-200 dark:bg-slate-800"></div>
+                <div class="flex items-center p-1 bg-slate-100 dark:bg-slate-800 rounded-lg">
+                    <button class="px-4 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">Admin</button>
+                    <button class="px-4 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">Manager</button>
+                    <button class="px-4 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">Engineer</button>
+                    <button class="px-4 py-1.5 text-xs font-bold bg-white dark:bg-slate-700 shadow-sm rounded text-primary transition-all">User</button>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="relative group">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">search</span>
+                    <input class="pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm w-64 focus:ring-1 focus:ring-primary placeholder:text-slate-500" placeholder="Search your tickets..." type="text"/>
+                </div>
+                <button class="relative size-10 flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                    <span class="material-symbols-outlined text-slate-600 dark:text-slate-300">notifications</span>
+                </button>
+            </div>
+        </header>
+        <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+            <div class="mb-8">
+                <h3 class="text-xl font-bold mb-1">Welcome to IT Support</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Create and track your support tickets</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white dark:bg-[#1e293b] p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2.5 bg-primary/10 rounded-lg">
+                            <span class="material-symbols-outlined text-primary">confirmation_number</span>
+                        </div>
+                    </div>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Total Tickets</p>
+                    <h3 class="text-2xl font-bold mt-1">@ViewBag.UserTicketsCount</h3>
+                </div>
+                <div class="bg-white dark:bg-[#1e293b] p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2.5 bg-amber-500/10 rounded-lg">
+                            <span class="material-symbols-outlined text-amber-500">schedule</span>
+                        </div>
+                    </div>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Pending</p>
+                    <h3 class="text-2xl font-bold mt-1">@ViewBag.UserPendingCount</h3>
+                </div>
+                <div class="bg-white dark:bg-[#1e293b] p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2.5 bg-green-500/10 rounded-lg">
+                            <span class="material-symbols-outlined text-green-500">check_circle</span>
+                        </div>
+                    </div>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Resolved</p>
+                    <h3 class="text-2xl font-bold mt-1">@ViewBag.UserResolvedCount</h3>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 dark:border-slate-800">
+                        <h4 class="font-bold text-slate-900 dark:text-white">Quick Actions</h4>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <a href="@Url.Action("Create", "Ticket")" class="flex items-center gap-4 p-4 bg-primary/5 hover:bg-primary/10 rounded-lg transition-colors group">
+                            <div class="size-12 rounded-lg bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                <span class="material-symbols-outlined">add_circle</span>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Create New Ticket</h4>
+                                <p class="text-xs text-slate-500">Submit a new support request</p>
+                            </div>
+                        </a>
+                        <a href="@Url.Action("MyTickets", "Ticket")" class="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors group">
+                            <div class="size-12 rounded-lg bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 group-hover:scale-110 transition-transform">
+                                <span class="material-symbols-outlined">list</span>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">View My Tickets</h4>
+                                <p class="text-xs text-slate-500">Track your existing tickets</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 dark:border-slate-800">
+                        <h4 class="font-bold text-slate-900 dark:text-white">Recent Activity</h4>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-3">
+                                <div class="size-2 rounded-full bg-green-500"></div>
+                                <p class="text-sm text-slate-600 dark:text-slate-400">Your tickets are being processed</p>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="size-2 rounded-full bg-blue-500"></div>
+                                <p class="text-sm text-slate-600 dark:text-slate-400">Support team is available 24/7</p>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="size-2 rounded-full bg-amber-500"></div>
+                                <p class="text-sm text-slate-600 dark:text-slate-400">Average response time: 2 hours</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

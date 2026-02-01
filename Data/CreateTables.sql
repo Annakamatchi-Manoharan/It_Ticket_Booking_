@@ -44,7 +44,8 @@ VALUES ('manager@itticketing.com', 'Manager123!', 'Alex', 'Rivera', 'Manager', T
 INSERT INTO Users (Email, PasswordHash, FirstName, LastName, Role, IsActive) VALUES
 ('john.doe@company.com', 'Password123!', 'John', 'Doe', 'User', TRUE),
 ('jane.smith@company.com', 'Password123!', 'Jane', 'Smith', 'User', TRUE),
-('mike.wilson@company.com', 'Password123!', 'Mike', 'Wilson', 'Support', TRUE);
+('mike.wilson@company.com', 'Password123!', 'Mike', 'Wilson', 'Support', TRUE),
+('alex.morgan@company.com', 'Password123!', 'Alex', 'Morgan', 'Engineer', TRUE);
 
 -- Insert sample tickets for testing
 INSERT INTO Tickets (Subject, Description, Priority, Status, Department, Category, CreatedById) VALUES

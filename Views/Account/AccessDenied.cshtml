@@ -1,0 +1,47 @@
+@{
+    ViewData["Title"] = "Access Denied";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Access Denied - IT Support Portal</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex items-center justify-center">
+    <div class="max-w-md w-full mx-4">
+        <div class="text-center">
+            <div class="size-20 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span class="material-symbols-outlined text-4xl text-red-500">lock</span>
+            </div>
+            <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">Access Denied</h1>
+            <p class="text-slate-600 dark:text-slate-400 mb-8">
+                You don't have permission to access this page. Please contact your administrator if you think this is an error.
+            </p>
+            <div class="space-y-4">
+                <a href="@Url.Action("Dashboard", "Home")" class="w-full flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium">
+                    <span class="material-symbols-outlined">home</span>
+                    Back to Dashboard
+                </a>
+                <a href="@Url.Action("Logout", "Account")" class="w-full flex items-center justify-center gap-2 px-6 py-3 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors font-medium">
+                    <span class="material-symbols-outlined">logout</span>
+                    Logout
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

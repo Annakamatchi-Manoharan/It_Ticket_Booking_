@@ -82,28 +82,6 @@
 <span class="text-sm font-medium">My Tickets</span>
 </a>
 </div>
-<div class="space-y-1">
-<p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">IT Operations</p>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all" href="#">
-<span class="material-symbols-outlined text-[22px]">assignment_turned_in</span>
-<span class="text-sm font-medium">Assigned Tickets</span>
-</a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all" href="#">
-<span class="material-symbols-outlined text-[22px]">auto_stories</span>
-<span class="text-sm font-medium">Knowledge Base</span>
-</a>
-</div>
-<div class="space-y-1">
-<p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Management</p>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all" href="#">
-<span class="material-symbols-outlined text-[22px]">groups</span>
-<span class="text-sm font-medium">Team Overview</span>
-</a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all" href="#">
-<span class="material-symbols-outlined text-[22px]">monitoring</span>
-<span class="text-sm font-medium">Reports &amp; Analytics</span>
-</a>
-</div>
 </nav>
 <div class="p-4 border-t border-slate-800 space-y-4">
 <div class="flex items-center gap-3 px-2 py-3 rounded-xl bg-slate-900/50">
@@ -135,9 +113,6 @@
 <button class="relative size-10 flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
 <span class="material-symbols-outlined text-slate-600 dark:text-slate-300">notifications</span>
 <span class="absolute top-2.5 right-2.5 size-2 bg-red-500 rounded-full border-2 border-white dark:border-[#101a22]"></span>
-</button>
-<button class="size-10 flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
-<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">help</span>
 </button>
 </div>
 </header>
@@ -238,12 +213,12 @@
                                         <span class="material-symbols-outlined text-[16px] text-slate-500 cursor-help" title="Needed for remote troubleshooting">info</span>
                                         <span class="text-red-500">*</span>
 </label>
-<input name="TeamViewerId" value="" autocomplete="off" class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2.5 text-sm focus:ring-primary focus:border-primary @(ViewData.ModelState["TeamViewerId"]?.Errors.Count > 0 ? "border-red-500" : "")" placeholder="Enter ID" type="text"/>
+<input name="TeamViewerId" value="" autocomplete="off" class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2.5 text-sm focus:ring-primary focus:border-primary @(ViewData.ModelState["TeamViewerId"]?.Errors.Count > 0 ? "border-red-500" : "")" placeholder="Enter ID" type="text" readonly onfocus="this.removeAttribute('readonly')" />
 <span asp-validation-for="TeamViewerId" class="text-xs text-red-500"></span>
 </div>
 <div class="space-y-2">
 <label class="text-sm font-bold text-slate-700 dark:text-slate-300">Team Viewer Password <span class="text-red-500">*</span></label>
-<input name="TeamViewerPassword" value="" autocomplete="off" class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2.5 text-sm focus:ring-primary focus:border-primary @(ViewData.ModelState["TeamViewerPassword"]?.Errors.Count > 0 ? "border-red-500" : "")" placeholder="••••••••" type="password"/>
+<input name="TeamViewerPassword" value="" autocomplete="off" class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2.5 text-sm focus:ring-primary focus:border-primary @(ViewData.ModelState["TeamViewerPassword"]?.Errors.Count > 0 ? "border-red-500" : "")" placeholder="••••••••" type="password" readonly onfocus="this.removeAttribute('readonly')" />
 <span asp-validation-for="TeamViewerPassword" class="text-xs text-red-500"></span>
 </div>
 </div>

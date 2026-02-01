@@ -146,14 +146,22 @@
 <!-- Top Navigation Bar -->
 <header class="h-16 border-b border-slate-200 dark:border-slate-800 px-8 flex items-center justify-between bg-white dark:bg-[#101a22] z-10">
 <div class="flex items-center gap-6">
-<h2 class="text-lg font-bold tracking-tight">System Overview</h2>
+<h2 class="text-lg font-bold tracking-tight">Dashboard Overview</h2>
 <div class="h-6 w-px bg-slate-200 dark:bg-slate-800"></div>
-<!-- Role Switcher Control -->
 <div class="flex items-center p-1 bg-slate-100 dark:bg-slate-800 rounded-lg">
-<button class="px-4 py-1.5 text-xs font-bold bg-white dark:bg-slate-700 shadow-sm rounded text-primary">Admin</button>
-<button class="px-4 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">Manager</button>
-<button class="px-4 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">Engineer</button>
-<button class="px-4 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">User</button>
+@{
+    var userRole = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;
+}
+@if (userRole == "Admin" || userRole == "Manager")
+{
+    <button class="px-4 py-1.5 text-xs font-bold bg-white dark:bg-slate-700 shadow-sm rounded text-primary transition-all">Admin</button>
+    <a href="@Url.Action("ManagerDashboard", "Home")" class="px-4 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">Manager</a>
+}
+@if (userRole == "Admin" || userRole == "Manager" || userRole == "Engineer")
+{
+    <a href="@Url.Action("EngineerDashboard", "Home")" class="px-4 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">Engineer</a>
+}
+<a href="@Url.Action("MyTickets", "Ticket")" class="px-4 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">User</a>
 </div>
 </div>
 <div class="flex items-center gap-4">
@@ -185,7 +193,7 @@
 <span class="text-xs font-bold text-green-500 bg-green-500/10 px-2 py-1 rounded">+12%</span>
 </div>
 <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Open Tickets</p>
-<h3 class="text-2xl font-bold mt-1">128</h3>
+<h3 class="text-2xl font-bold mt-1">@ViewBag.OpenTicketsCount</h3>
 </div>
 <div class="bg-white dark:bg-[#1e293b] p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
 <div class="flex justify-between items-start mb-4">
@@ -195,7 +203,7 @@
 <span class="text-xs font-bold text-slate-400 bg-slate-500/10 px-2 py-1 rounded">0%</span>
 </div>
 <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Pending</p>
-<h3 class="text-2xl font-bold mt-1">42</h3>
+<h3 class="text-2xl font-bold mt-1">@ViewBag.PendingTicketsCount</h3>
 </div>
 <div class="bg-white dark:bg-[#1e293b] p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
 <div class="flex justify-between items-start mb-4">
@@ -205,7 +213,7 @@
 <span class="text-xs font-bold text-green-500 bg-green-500/10 px-2 py-1 rounded">+5%</span>
 </div>
 <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Resolved Today</p>
-<h3 class="text-2xl font-bold mt-1">890</h3>
+<h3 class="text-2xl font-bold mt-1">@ViewBag.ResolvedTodayCount</h3>
 </div>
 <div class="bg-white dark:bg-[#1e293b] p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
 <div class="flex justify-between items-start mb-4">
@@ -355,4 +363,28 @@
         }
     });
 </script>
-</body></html>
+<script>
+        // Search functionality for recent activity table
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.querySelector('input[placeholder="Search tickets, assets, users..."]');
+            const activityItems = document.querySelectorAll('.divide-y > div');
+            
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    
+                    activityItems.forEach(item => {
+                        const itemText = item.textContent.toLowerCase();
+                        
+                        if (itemText.includes(searchTerm)) {
+                            item.style.display = '';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
