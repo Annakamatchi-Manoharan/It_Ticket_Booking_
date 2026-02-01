@@ -4,30 +4,45 @@ using System.Diagnostics;
 
 namespace ITTicketingSystem.Controllers
 {
-    [Authorize]
     public class HomeController : Controller
     {
         public IActionResult Index()
         {
-            // Check if user has Manager role
-            if (User.IsInRole("Manager"))
+            // Redirect to login page
+            return RedirectToAction("Login", "Account");
+        }
+
+        [Authorize]
+        public IActionResult Dashboard()
+        {
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;
+            
+            // Redirect to appropriate dashboard based on role
+            if (userRole == "Manager")
             {
-                return View("ManagerDashboard");
+                return RedirectToAction("ManagerDashboard");
             }
             
-            // Default user dashboard
+            // Default dashboard for other roles
             return View();
         }
 
-        public IActionResult Privacy()
+        [Authorize]
+        public IActionResult ManagerDashboard()
         {
             return View();
+        }
+
+        [Authorize]
+        public IActionResult Privacy()
+        {
+            return RedirectToAction("Login", "Account");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View();
+            return RedirectToAction("Login", "Account");
         }
     }
 }

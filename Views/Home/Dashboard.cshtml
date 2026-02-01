@@ -2,10 +2,11 @@
 <html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Manager Dashboard - IT Support Suite</title>
+<title>Unified System Dashboard - Expanded View</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -70,7 +71,7 @@
 <!-- Main Group -->
 <div class="space-y-1">
 <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Main</p>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary border border-primary/20" href="@Url.Action("Dashboard", "Home")">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary border border-primary/20" href="#">
 <span class="material-symbols-outlined text-[22px]">dashboard</span>
 <span class="text-sm font-semibold">Dashboard</span>
 </a>
@@ -98,9 +99,9 @@
 <!-- Management Group -->
 <div class="space-y-1">
 <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Management</p>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary border border-primary/20" href="#">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all" href="#">
 <span class="material-symbols-outlined text-[22px]">groups</span>
-<span class="text-sm font-semibold">Team Overview</span>
+<span class="text-sm font-medium">Team Overview</span>
 </a>
 <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all" href="#">
 <span class="material-symbols-outlined text-[22px]">monitoring</span>
@@ -145,12 +146,12 @@
 <!-- Top Navigation Bar -->
 <header class="h-16 border-b border-slate-200 dark:border-slate-800 px-8 flex items-center justify-between bg-white dark:bg-[#101a22] z-10">
 <div class="flex items-center gap-6">
-<h2 class="text-lg font-bold tracking-tight">Manager Dashboard</h2>
+<h2 class="text-lg font-bold tracking-tight">System Overview</h2>
 <div class="h-6 w-px bg-slate-200 dark:bg-slate-800"></div>
 <!-- Role Switcher Control -->
 <div class="flex items-center p-1 bg-slate-100 dark:bg-slate-800 rounded-lg">
-<button class="px-4 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">Admin</button>
-<button class="px-4 py-1.5 text-xs font-bold bg-white dark:bg-slate-700 shadow-sm rounded text-primary">Manager</button>
+<button class="px-4 py-1.5 text-xs font-bold bg-white dark:bg-slate-700 shadow-sm rounded text-primary">Admin</button>
+<button class="px-4 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">Manager</button>
 <button class="px-4 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">Engineer</button>
 <button class="px-4 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">User</button>
 </div>
@@ -174,217 +175,150 @@
 </header>
 <!-- Main Content Grid -->
 <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
-<!-- Manager Stats Grid -->
+<!-- Stats Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 <div class="bg-white dark:bg-[#1e293b] p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
 <div class="flex justify-between items-start mb-4">
 <div class="p-2 bg-blue-100 dark:bg-blue-900/40 rounded-lg">
-<span class="material-symbols-outlined text-primary">groups</span>
+<span class="material-symbols-outlined text-primary">confirmation_number</span>
 </div>
-<span class="text-xs font-bold text-green-500 bg-green-500/10 px-2 py-1 rounded">+2</span>
+<span class="text-xs font-bold text-green-500 bg-green-500/10 px-2 py-1 rounded">+12%</span>
 </div>
-<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Team Members</p>
-<h3 class="text-2xl font-bold mt-1">12</h3>
-</div>
-<div class="bg-white dark:bg-[#1e293b] p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-<div class="flex justify-between items-start mb-4">
-<div class="p-2 bg-green-100 dark:bg-green-900/40 rounded-lg">
-<span class="material-symbols-outlined text-green-500">trending_up</span>
-</div>
-<span class="text-xs font-bold text-green-500 bg-green-500/10 px-2 py-1 rounded">+8%</span>
-</div>
-<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Team Productivity</p>
-<h3 class="text-2xl font-bold mt-1">94%</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Open Tickets</p>
+<h3 class="text-2xl font-bold mt-1">128</h3>
 </div>
 <div class="bg-white dark:bg-[#1e293b] p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
 <div class="flex justify-between items-start mb-4">
 <div class="p-2 bg-amber-100 dark:bg-amber-900/40 rounded-lg">
-<span class="material-symbols-outlined text-amber-500">schedule</span>
+<span class="material-symbols-outlined text-amber-500">pending_actions</span>
 </div>
-<span class="text-xs font-bold text-amber-500 bg-amber-500/10 px-2 py-1 rounded">-5%</span>
+<span class="text-xs font-bold text-slate-400 bg-slate-500/10 px-2 py-1 rounded">0%</span>
 </div>
-<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Avg Resolution Time</p>
-<h3 class="text-2xl font-bold mt-1">2.4h</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Pending</p>
+<h3 class="text-2xl font-bold mt-1">42</h3>
 </div>
 <div class="bg-white dark:bg-[#1e293b] p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
 <div class="flex justify-between items-start mb-4">
-<div class="p-2 bg-purple-100 dark:bg-purple-900/40 rounded-lg">
-<span class="material-symbols-outlined text-purple-500">psychology</span>
+<div class="p-2 bg-green-100 dark:bg-green-900/40 rounded-lg">
+<span class="material-symbols-outlined text-green-500">check_circle</span>
 </div>
-<span class="text-xs font-bold text-green-500 bg-green-500/10 px-2 py-1 rounded">+15%</span>
+<span class="text-xs font-bold text-green-500 bg-green-500/10 px-2 py-1 rounded">+5%</span>
 </div>
-<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Customer Satisfaction</p>
-<h3 class="text-2xl font-bold mt-1">4.8</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Resolved Today</p>
+<h3 class="text-2xl font-bold mt-1">890</h3>
+</div>
+<div class="bg-white dark:bg-[#1e293b] p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-red-100 dark:bg-red-900/40 rounded-lg">
+<span class="material-symbols-outlined text-red-500">timer_off</span>
+</div>
+<span class="text-xs font-bold text-red-500 bg-red-500/10 px-2 py-1 rounded">+1%</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Overdue (SLA)</p>
+<h3 class="text-2xl font-bold mt-1">12</h3>
 </div>
 </div>
-<!-- Team Performance Section -->
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-<!-- Team Members Table -->
-<div class="lg:col-span-2 bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<!-- Main Section Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Analytics Chart -->
+<div class="lg:col-span-2 bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col">
 <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
 <div>
-<h4 class="font-bold text-slate-900 dark:text-white">Team Performance</h4>
-<p class="text-xs text-slate-500 mt-1">Individual metrics and workload distribution</p>
+<h4 class="font-bold text-slate-900 dark:text-white">Ticket Volume Trends</h4>
+<p class="text-xs text-slate-500 mt-1">Incoming vs. Resolved tickets (Last 7 Days)</p>
 </div>
-<button class="text-xs text-primary font-bold hover:underline">View Details</button>
-</div>
-<div class="overflow-x-auto">
-<table class="w-full">
-<thead class="bg-slate-50 dark:bg-slate-800/50">
-<tr>
-<th class="text-left p-4 text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Team Member</th>
-<th class="text-left p-4 text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Tickets</th>
-<th class="text-left p-4 text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Resolved</th>
-<th class="text-left p-4 text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Avg Time</th>
-<th class="text-left p-4 text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Status</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<td class="p-4">
-<div class="flex items-center gap-3">
-<div class="size-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold">SJ</div>
-<div>
-<p class="text-sm font-semibold">Sarah Jenkins</p>
-<p class="text-xs text-slate-500">Senior Engineer</p>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 text-xs font-bold bg-slate-100 dark:bg-slate-800 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">Weekly</button>
+<button class="px-3 py-1.5 text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Monthly</button>
 </div>
 </div>
-</td>
-<td class="p-4 text-sm">24</td>
-<td class="p-4 text-sm text-green-600">18</td>
-<td class="p-4 text-sm">1.8h</td>
-<td class="p-4">
-<span class="inline-flex items-center gap-1 px-2 py-1 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 text-xs font-medium rounded-full">
-<span class="size-1.5 bg-green-500 rounded-full"></span>
-Active
-</span>
-</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<td class="p-4">
-<div class="flex items-center gap-3">
-<div class="size-8 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs font-bold">DL</div>
-<div>
-<p class="text-sm font-semibold">David Low</p>
-<p class="text-xs text-slate-500">IT Specialist</p>
+<div class="p-6 flex-1 flex flex-col justify-end min-h-[300px]">
+<div class="relative flex-1">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 500 200">
+<defs>
+<lineargradient id="gradient" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#1392ec" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#1392ec" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<!-- Area Chart Path -->
+<path d="M0 160 C50 140, 100 180, 150 120 S250 40, 300 100 S400 150, 450 80 S500 110, 500 200 L0 200 Z" fill="url(#gradient)"></path>
+<!-- Line Path -->
+<path d="M0 160 C50 140, 100 180, 150 120 S250 40, 300 100 S400 150, 450 80 S500 110" fill="none" stroke="#1392ec" stroke-linecap="round" stroke-width="3"></path>
+<!-- Resolved Line (Dashed) -->
+<path d="M0 180 C80 160, 120 190, 180 150 S280 100, 350 130 S450 170, 500 140" fill="none" stroke="#92b2c9" stroke-dasharray="8 4" stroke-linecap="round" stroke-width="2"></path>
+</svg>
+</div>
+<div class="flex justify-between mt-6 px-2">
+<span class="text-xs font-bold text-slate-400">Mon</span>
+<span class="text-xs font-bold text-slate-400">Tue</span>
+<span class="text-xs font-bold text-slate-400">Wed</span>
+<span class="text-xs font-bold text-slate-400">Thu</span>
+<span class="text-xs font-bold text-slate-400">Fri</span>
+<span class="text-xs font-bold text-slate-400">Sat</span>
+<span class="text-xs font-bold text-slate-400">Sun</span>
 </div>
 </div>
-</td>
-<td class="p-4 text-sm">18</td>
-<td class="p-4 text-sm text-green-600">15</td>
-<td class="p-4 text-sm">2.1h</td>
-<td class="p-4">
-<span class="inline-flex items-center gap-1 px-2 py-1 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 text-xs font-medium rounded-full">
-<span class="size-1.5 bg-green-500 rounded-full"></span>
-Active
-</span>
-</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<td class="p-4">
-<div class="flex items-center gap-3">
-<div class="size-8 rounded-full bg-amber-500 flex items-center justify-center text-white text-xs font-bold">MJ</div>
-<div>
-<p class="text-sm font-semibold">Mike Johnson</p>
-<p class="text-xs text-slate-500">Support Tech</p>
 </div>
-</div>
-</td>
-<td class="p-4 text-sm">31</td>
-<td class="p-4 text-sm text-green-600">22</td>
-<td class="p-4 text-sm">3.2h</td>
-<td class="p-4">
-<span class="inline-flex items-center gap-1 px-2 py-1 bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 text-xs font-medium rounded-full">
-<span class="size-1.5 bg-amber-500 rounded-full"></span>
-Busy
-</span>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<!-- Quick Actions -->
+<!-- Recent Activity List -->
 <div class="bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col">
-<div class="p-6 border-b border-slate-100 dark:border-slate-800">
-<h4 class="font-bold text-slate-900 dark:text-white">Quick Actions</h4>
-</div>
-<div class="p-6 space-y-4">
-<button class="w-full flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-<span class="material-symbols-outlined text-primary">person_add</span>
-<span class="text-sm font-medium">Assign Ticket</span>
-</button>
-<button class="w-full flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-<span class="material-symbols-outlined text-primary">assessment</span>
-<span class="text-sm font-medium">Generate Report</span>
-</button>
-<button class="w-full flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-<span class="material-symbols-outlined text-primary">meeting_room</span>
-<span class="text-sm font-medium">Schedule Review</span>
-</button>
-<button class="w-full flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-<span class="material-symbols-outlined text-primary">school</span>
-<span class="text-sm font-medium">Training Materials</span>
-</button>
-</div>
-</div>
-</div>
-<!-- Priority Tickets -->
-<div class="bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
 <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
-<div>
-<h4 class="font-bold text-slate-900 dark:text-white">Priority Tickets</h4>
-<p class="text-xs text-slate-500 mt-1">High-priority items requiring attention</p>
-</div>
+<h4 class="font-bold text-slate-900 dark:text-white">Recent Activity</h4>
 <button class="text-xs text-primary font-bold hover:underline">View All</button>
 </div>
-<div class="divide-y divide-slate-100 dark:divide-slate-800">
-<div class="p-6 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="flex items-start justify-between mb-3">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-red-500">priority_high</span>
-<div>
-<p class="text-sm font-semibold">Critical: Database Server Down</p>
-<p class="text-xs text-slate-500">Ticket #8947 • Assigned to: Sarah J.</p>
+<div class="p-6 space-y-6 flex-1 overflow-y-auto max-h-[400px]">
+<div class="flex gap-4">
+<div class="size-2 mt-2 rounded-full bg-primary flex-shrink-0"></div>
+<div class="space-y-1">
+<p class="text-sm font-semibold">New ticket #8942 assigned</p>
+<p class="text-xs text-slate-500">Sarah Jenkins • 12 mins ago</p>
+<div class="mt-2 text-xs p-2 bg-slate-50 dark:bg-slate-800/50 rounded border border-slate-100 dark:border-slate-700">
+                                        "VPN access issues for remote marketing team."
+                                    </div>
 </div>
 </div>
-<span class="text-xs font-bold text-red-500 bg-red-500/10 px-2 py-1 rounded">Critical</span>
-</div>
-<p class="text-xs text-slate-600 dark:text-slate-400 mb-3">Main database server is unresponsive, affecting all production services.</p>
-<div class="flex items-center gap-4 text-xs text-slate-500">
-<span class="flex items-center gap-1">
-<span class="material-symbols-outlined text-sm">schedule</span>
-2 hours ago
-</span>
-<span class="flex items-center gap-1">
-<span class="material-symbols-outlined text-sm">timer</span>
-SLA: 30 min
-</span>
+<div class="flex gap-4">
+<div class="size-2 mt-2 rounded-full bg-green-500 flex-shrink-0"></div>
+<div class="space-y-1">
+<p class="text-sm font-semibold">Ticket #8930 Resolved</p>
+<p class="text-xs text-slate-500">David Low • 45 mins ago</p>
 </div>
 </div>
-<div class="p-6 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="flex items-start justify-between mb-3">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-amber-500">warning</span>
-<div>
-<p class="text-sm font-semibold">High: VPN Connection Issues</p>
-<p class="text-xs text-slate-500">Ticket #8942 • Assigned to: David L.</p>
+<div class="flex gap-4">
+<div class="size-2 mt-2 rounded-full bg-amber-500 flex-shrink-0"></div>
+<div class="space-y-1">
+<p class="text-sm font-semibold">Critical Alert: Server 04</p>
+<p class="text-xs text-slate-500">System Monitor • 2 hours ago</p>
 </div>
 </div>
-<span class="text-xs font-bold text-amber-500 bg-amber-500/10 px-2 py-1 rounded">High</span>
-</div>
-<p class="text-xs text-slate-600 dark:text-slate-400 mb-3">Remote marketing team unable to connect to corporate VPN.</p>
-<div class="flex items-center gap-4 text-xs text-slate-500">
-<span class="flex items-center gap-1">
-<span class="material-symbols-outlined text-sm">schedule</span>
-45 mins ago
-</span>
-<span class="flex items-center gap-1">
-<span class="material-symbols-outlined text-sm">timer</span>
-SLA: 2 hours
-</span>
+<div class="flex gap-4">
+<div class="size-2 mt-2 rounded-full bg-primary flex-shrink-0"></div>
+<div class="space-y-1">
+<p class="text-sm font-semibold">Knowledge base update</p>
+<p class="text-xs text-slate-500">Admin User • 5 hours ago</p>
 </div>
 </div>
+</div>
+</div>
+</div>
+<!-- Quick Actions Grid -->
+<div class="mt-8 grid grid-cols-1 lg:grid-cols-4 gap-6">
+<a href="@Url.Action("Create", "Ticket")" class="flex flex-col items-center justify-center p-8 bg-white dark:bg-[#1e293b] border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl hover:border-primary/50 hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-all group text-decoration-none">
+<span class="material-symbols-outlined text-3xl text-slate-400 group-hover:text-primary mb-3">add_circle</span>
+<span class="text-sm font-bold">New Ticket</span>
+</a>
+<button class="flex flex-col items-center justify-center p-8 bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-800 rounded-xl hover:shadow-md transition-all">
+<span class="material-symbols-outlined text-3xl text-slate-400 mb-3">person_add</span>
+<span class="text-sm font-bold">Invite User</span>
+</button>
+<button class="flex flex-col items-center justify-center p-8 bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-800 rounded-xl hover:shadow-md transition-all">
+<span class="material-symbols-outlined text-3xl text-slate-400 mb-3">file_download</span>
+<span class="text-sm font-bold">Export Logs</span>
+</button>
+<button class="flex flex-col items-center justify-center p-8 bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-800 rounded-xl hover:shadow-md transition-all">
+<span class="material-symbols-outlined text-3xl text-slate-400 mb-3">contact_support</span>
+<span class="text-sm font-bold">Get Support</span>
+</button>
 </div>
 </div>
 </main>

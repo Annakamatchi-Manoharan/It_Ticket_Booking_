@@ -2,10 +2,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ITTicketingSystem.Models;
 using ITTicketingSystem.Repositories;
+using System.Security.Claims;
+using System.Linq;
 
 namespace ITTicketingSystem.Controllers
 {
-    [Authorize]
     public class TicketController : Controller
     {
         private readonly ITicketRepository _ticketRepository;
@@ -17,12 +18,13 @@ namespace ITTicketingSystem.Controllers
             _userRepository = userRepository;
         }
 
-        [HttpGet]
+        [Authorize]
         public IActionResult Create()
         {
             return View(new CreateTicketViewModel());
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateTicketViewModel model)
@@ -32,88 +34,109 @@ namespace ITTicketingSystem.Controllers
                 return View(model);
             }
 
-            try
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(userIdClaim, out var userId))
             {
-                var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0");
-                
-                var ticket = new Ticket
-                {
-                    Subject = model.Subject,
-                    Description = model.Description,
-                    Priority = model.Priority,
-                    Department = model.Department,
-                    Category = model.Category,
-                    Status = "Open",
-                    CreatedById = userId,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow
-                };
-
-                // Handle attachments if any
-                if (model.Attachments != null && model.Attachments.Any())
-                {
-                    var attachmentPaths = new List<string>();
-                    foreach (var file in model.Attachments)
-                    {
-                        if (file.Length > 0)
-                        {
-                            // For now, just store file names. In production, you'd save files to disk or cloud storage
-                            attachmentPaths.Add(file.FileName);
-                        }
-                    }
-                    ticket.Attachments = string.Join(",", attachmentPaths);
-                }
-
-                await _ticketRepository.CreateAsync(ticket);
-
-                TempData["Success"] = "Ticket created successfully!";
-                return RedirectToAction("MyTickets");
+                return RedirectToAction("Login", "Account");
             }
-            catch (Exception ex)
+
+            var ticket = new Ticket
             {
-                model.ErrorMessage = "An error occurred while creating the ticket. Please try again.";
-                return View(model);
+                Subject = model.Subject,
+                Description = model.Description,
+                Priority = model.Priority,
+                Department = model.Department,
+                Category = model.Category,
+                WorkLocation = model.WorkLocation,
+                TeamViewerId = model.TeamViewerId,
+                TeamViewerPassword = model.TeamViewerPassword,
+                ContactNumber = model.ContactNumber,
+                ContactEmail = model.ContactEmail,
+                CreatedById = userId,
+                Status = "Open"
+            };
+
+            if (model.Attachments != null && model.Attachments.Count > 0)
+            {
+                ticket.Attachments = string.Join(";", model.Attachments.Select(a => a.FileName));
             }
+
+            await _ticketRepository.CreateAsync(ticket);
+
+            TempData["SuccessMessage"] = "Ticket completed successfully! Your ticket has been submitted and will be processed shortly.";
+
+            return RedirectToAction("MyTickets", "Ticket");
         }
 
-        [HttpGet]
-        public async Task<IActionResult> MyTickets()
+        [Authorize]
+        public async Task<IActionResult> MyTickets(int page = 1, int pageSize = 10, string search = "", string status = "All", string category = "All")
         {
-            var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0");
-            var tickets = await _ticketRepository.GetByUserIdAsync(userId);
-            return View(tickets);
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var allUserTickets = await _ticketRepository.GetByUserIdAsync(userId);
+            
+            // Apply search filter
+            if (!string.IsNullOrEmpty(search))
+            {
+                allUserTickets = allUserTickets.Where(t => 
+                    t.Subject.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                    t.Description.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                    t.Department.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                    t.Category.Contains(search, StringComparison.OrdinalIgnoreCase)
+                ).ToList();
+            }
+            
+            // Apply status filter
+            if (status != "All")
+            {
+                allUserTickets = allUserTickets.Where(t => t.Status == status).ToList();
+            }
+            
+            // Apply category filter
+            if (category != "All")
+            {
+                allUserTickets = allUserTickets.Where(t => t.Category == category).ToList();
+            }
+            
+            var totalCount = allUserTickets.Count();
+            var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+            
+            // Ensure page is within valid range
+            page = Math.Max(1, Math.Min(page, totalPages > 0 ? totalPages : 1));
+            
+            var pagedTickets = allUserTickets
+                .OrderByDescending(t => t.CreatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.TotalCount = totalCount;
+            ViewBag.PageSize = pageSize;
+            ViewBag.HasPreviousPage = page > 1;
+            ViewBag.HasNextPage = page < totalPages;
+            ViewBag.Search = search;
+            ViewBag.Status = status;
+            ViewBag.Category = category;
+
+            return View(pagedTickets);
         }
 
-        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Details(int id)
         {
-            var ticket = await _ticketRepository.GetByIdAsync(id);
-            if (ticket == null)
-            {
-                return NotFound();
-            }
-
-            // Check if user has permission to view this ticket
-            var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0");
-            if (ticket.CreatedById != userId && !User.IsInRole("Admin") && !User.IsInRole("Manager"))
-            {
-                return Forbid();
-            }
-
-            return View(ticket);
+            return RedirectToAction("Dashboard", "Home");
         }
 
-        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> AssignedTickets()
         {
-            if (!User.IsInRole("Admin") && !User.IsInRole("Manager") && !User.IsInRole("Support"))
-            {
-                return Forbid();
-            }
-
-            var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0");
-            var tickets = await _ticketRepository.GetByAssignedToIdAsync(userId);
-            return View(tickets);
+            return RedirectToAction("Dashboard", "Home");
         }
     }
 }

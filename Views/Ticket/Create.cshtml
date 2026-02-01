@@ -1,26 +1,26 @@
 @model ITTicketingSystem.Models.CreateTicketViewModel
 @{
-    Layout = "_Layout";
-    ViewData["Title"] = "Create New Ticket";
+    Layout = null;
 }
 
 <!DOCTYPE html>
-<html class="light" lang="en"><head>
+<html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>IT Ticketing System - Create Ticket</title>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<title>Create Ticket - Enterprise IT Support Suite</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#205964",
-                        "background-light": "#fafafa",
-                        "background-dark": "#272b30",
+                        "primary": "#1392ec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101a22",
+                        "card-dark": "#1e293b",
                     },
                     fontFamily: {
                         "display": ["Manrope"]
@@ -31,322 +31,416 @@
         }
     </script>
 <style>
-        body {
-            font-family: 'Manrope', sans-serif;
-        }
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
-        .active-nav {
-            background-color: #205964;
-            color: white !important;
+        body {
+            font-family: 'Manrope', sans-serif;
         }
-        .sidebar-scroll::-webkit-scrollbar {
-            width: 4px;
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
         }
-        .sidebar-scroll::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.1);
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
             border-radius: 10px;
-        }
-        .rte-mockup {
-            min-height: 200px;
-        }
-        .validation-error {
-            color: #dc2626;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
         }
     </style>
 </head>
-<body class="bg-background-light dark:bg-background-dark font-display text-slate-800 dark:text-slate-200">
-<div class="flex min-h-screen">
-<aside class="fixed inset-y-0 left-0 w-64 bg-[#101719] text-white z-50 flex flex-col">
-<div class="p-6 flex items-center gap-3">
-<div class="size-8 bg-primary rounded flex items-center justify-center">
-<span class="material-symbols-outlined text-white">confirmation_number</span>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="flex h-screen overflow-hidden">
+<aside class="w-72 flex-shrink-0 bg-[#0b1217] border-r border-slate-800 flex flex-col h-full">
+<div class="p-6 flex items-center justify-between border-b border-slate-800">
+<div class="flex items-center gap-3">
+<div class="size-10 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-2xl">confirmation_number</span>
 </div>
-<h1 class="text-xl font-extrabold tracking-tight">IT CORE</h1>
+<div>
+<h1 class="text-sm font-bold leading-tight">Enterprise IT</h1>
+<p class="text-[11px] text-slate-400 uppercase tracking-widest font-semibold">Support Suite</p>
 </div>
-<nav class="flex-1 px-4 py-4 space-y-1 sidebar-scroll overflow-y-auto">
-<p class="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Main Menu</p>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-colors" href="@Url.Action("Index", "Home")">
-<span class="material-symbols-outlined">dashboard</span>
+</div>
+<button class="text-slate-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined">menu_open</span>
+</button>
+</div>
+<nav class="flex-1 overflow-y-auto py-6 px-4 space-y-8 custom-scrollbar">
+<div class="space-y-1">
+<p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Main</p>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all" href="@Url.Action("Dashboard", "Home")">
+<span class="material-symbols-outlined text-[22px]">dashboard</span>
 <span class="text-sm font-medium">Dashboard</span>
 </a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg active-nav transition-colors" href="@Url.Action("Create", "Ticket")">
-<span class="material-symbols-outlined">add_circle</span>
-<span class="text-sm font-medium">Create Ticket</span>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary border border-primary/20" href="@Url.Action("Create", "Ticket")">
+<span class="material-symbols-outlined text-[22px]">add_box</span>
+<span class="text-sm font-semibold">Create Ticket</span>
 </a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-colors" href="@Url.Action("MyTickets", "Ticket")">
-<span class="material-symbols-outlined">confirmation_number</span>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all" href="@Url.Action("MyTickets", "Ticket")">
+<span class="material-symbols-outlined text-[22px]">label_important</span>
 <span class="text-sm font-medium">My Tickets</span>
 </a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-colors" href="@Url.Action("AssignedTickets", "Ticket")">
-<span class="material-symbols-outlined">assignment_ind</span>
+</div>
+<div class="space-y-1">
+<p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">IT Operations</p>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[22px]">assignment_turned_in</span>
 <span class="text-sm font-medium">Assigned Tickets</span>
 </a>
-<p class="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider mt-6 mb-2">Management</p>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-colors" href="#">
-<span class="material-symbols-outlined">groups</span>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[22px]">auto_stories</span>
+<span class="text-sm font-medium">Knowledge Base</span>
+</a>
+</div>
+<div class="space-y-1">
+<p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Management</p>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[22px]">groups</span>
 <span class="text-sm font-medium">Team Overview</span>
 </a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-colors" href="#">
-<span class="material-symbols-outlined">analytics</span>
-<span class="text-sm font-medium">Reports</span>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[22px]">monitoring</span>
+<span class="text-sm font-medium">Reports &amp; Analytics</span>
 </a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-colors" href="#">
-<span class="material-symbols-outlined">notifications</span>
-<span class="text-sm font-medium">Notifications</span>
-<span class="ml-auto bg-primary text-[10px] px-1.5 py-0.5 rounded-full">12</span>
-</a>
-<p class="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider mt-6 mb-2">System</p>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-colors" href="#">
-<span class="material-symbols-outlined">person</span>
-<span class="text-sm font-medium">Profile</span>
-</a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-colors" href="#">
-<span class="material-symbols-outlined">settings</span>
-<span class="text-sm font-medium">Settings</span>
-</a>
+</div>
 </nav>
-<div class="p-4 border-t border-white/10">
+<div class="p-4 border-t border-slate-800 space-y-4">
+<div class="flex items-center gap-3 px-2 py-3 rounded-xl bg-slate-900/50">
+<div class="size-10 rounded-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuArhuNpL6O2HO3VaecONI9ePl8kTsrXfeTFI5LK7BzENiLP-8MRM6RBuVTDIjQMSQfhpE8tBT_LEQLts5hq7bbIl70G3Cn252z3Wnc9-tJDv82BhN9lMhi2XXG1KZBLvk6yfQlKqy6snvgzooimixBWl2G8IrX_8JGKn7z5cetYKnh-EVvTcbY3t5MUbyRglLNYoPZ86kfrcumsVneTPH4HLO47tpNHhav1ks5bHqx9iVh8NfBJNRTGCGkfYSZsoZHVZ5xcU2Dr1AVd')"></div>
+<div class="flex-1 overflow-hidden">
+<p class="text-sm font-bold truncate">@User.Identity?.Name</p>
+<p class="text-[11px] text-slate-400">@User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value</p>
+</div>
 <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" class="inline">
-@Html.AntiForgeryToken()
-<button type="submit" class="flex w-full items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-500/10 text-red-400 transition-colors">
-<span class="material-symbols-outlined">logout</span>
-<span class="text-sm font-medium">Logout</span>
+<button type="submit" class="text-slate-500 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-sm">logout</span>
 </button>
 </form>
+</div>
 </div>
 </aside>
-<main class="flex-1 ml-64 min-h-screen">
-<header class="sticky top-0 z-40 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 px-8 py-4">
-<div class="flex items-center justify-between gap-8">
-<div class="flex items-center gap-4 flex-1">
-<label class="relative w-full max-w-md text-slate-400">
-<span class="absolute inset-y-0 left-0 flex items-center pl-3">
-<span class="material-symbols-outlined text-[20px]">search</span>
-</span>
-<input class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-lg py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/50 transition-all placeholder:text-slate-500 text-slate-900 dark:text-white" placeholder="Search tickets..." type="text"/>
-</label>
+<main class="flex-1 flex flex-col bg-background-light dark:bg-background-dark overflow-hidden">
+<header class="h-16 border-b border-slate-200 dark:border-slate-800 px-8 flex items-center justify-between bg-white dark:bg-[#101a22] z-10">
+<div class="flex items-center gap-6">
+<h2 class="text-lg font-bold tracking-tight">Create New Ticket</h2>
+<div class="h-6 w-px bg-slate-200 dark:bg-slate-800"></div>
+<div class="flex items-center gap-2 text-xs font-semibold text-slate-500">
+<span>Support</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary">New Ticket Request</span>
+</div>
 </div>
 <div class="flex items-center gap-4">
-<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
-<span class="material-symbols-outlined">help_outline</span>
+<button class="relative size-10 flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">notifications</span>
+<span class="absolute top-2.5 right-2.5 size-2 bg-red-500 rounded-full border-2 border-white dark:border-[#101a22]"></span>
 </button>
-<div class="h-8 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
-<div class="flex items-center gap-3">
-<div class="text-right">
-<p class="text-xs font-bold leading-none">@User.Identity?.Name</p>
-<p class="text-[10px] text-slate-500">IT Manager</p>
-</div>
-<div class="size-9 rounded-full bg-slate-200 bg-cover bg-center border-2 border-primary/20" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuANoJb5O3rxhZXSZrehTz-0TP3VivqQ2XBcoLZkm2Pt1_Nf0xSS4oSSfp1zg2RcN_UuX8JM6ZuorVHtlMVLd1k9xsq-oUUeHmkuNrCuYV5olzk_vmvMx_zg6C-XwqoKPNMpWualzPyCcSQ3CFhvVt4Ab61MKS06gI2uAyunb-hsvNsuA9EZ_K4J_I6Y8E-OqtZkjjuKexc_mf-Gx1IoPY1RTMGFiiys933H6c8dr_llbOVJ95eEKhPIInkUTb84kDwoEE1Gg74V7WJa')"></div>
-</div>
-</div>
+<button class="size-10 flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">help</span>
+</button>
 </div>
 </header>
-<div class="p-8 max-w-4xl mx-auto">
-<div class="flex flex-col gap-1 mb-8">
-<h2 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">Create New Ticket</h2>
-<p class="text-slate-500 text-sm">Fill out the details below to submit a new service request to the IT team.</p>
+<div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+<div class="max-w-4xl mx-auto">
+<div class="bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
+<div class="p-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/20">
+<h3 class="text-lg font-bold">Ticket Details</h3>
+<p class="text-sm text-slate-500 mt-1">Please provide detailed information about your technical issue.</p>
 </div>
 
-<!-- Error Message -->
-@if (Model.ShowError)
-{
-    <div class="mb-6 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-center gap-3">
-        <span class="material-symbols-outlined text-red-500 text-xl">error</span>
-        <p class="text-red-700 dark:text-red-400 text-sm">@Model.ErrorMessage</p>
-    </div>
-}
+<form asp-action="Create" asp-controller="Ticket" method="post" enctype="multipart/form-data" class="p-8 space-y-8">
+@Html.AntiForgeryToken()
 
-<!-- Success Message -->
-@if (TempData["Success"] != null)
-{
-    <div class="mb-6 p-3 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg flex items-center gap-3">
-        <span class="material-symbols-outlined text-emerald-500 text-xl">check_circle</span>
-        <p class="text-emerald-700 dark:text-emerald-400 text-sm">@TempData["Success"]</p>
-    </div>
-}
+<div class="space-y-2">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300">Ticket Subject <span class="text-red-500">*</span></label>
+<input asp-for="Subject" class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2.5 text-sm focus:ring-primary focus:border-primary @(ViewData.ModelState["Subject"]?.Errors.Count > 0 ? "border-red-500" : "")" placeholder="Short summary of the issue" type="text" />
+<span asp-validation-for="Subject" class="text-xs text-red-500"></span>
+</div>
 
-<form asp-action="Create" method="post" enctype="multipart/form-data" class="space-y-6">
-    @Html.AntiForgeryToken()
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-2">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300">Problem Type <span class="text-red-500">*</span></label>
+<select asp-for="Category" class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2.5 text-sm focus:ring-primary focus:border-primary @(ViewData.ModelState["Category"]?.Errors.Count > 0 ? "border-red-500" : "")">
+<option value="">Select a category</option>
+<option value="Software Issue">Software Issue</option>
+<option value="Hardware Failure">Hardware Failure</option>
+<option value="Network/Access Issue">Network/Access Issue</option>
+<option value="Email &amp; Communication">Email &amp; Communication</option>
+<option value="Asset Request">Asset Request</option>
+<option value="Other">Other</option>
+</select>
+<span asp-validation-for="Category" class="text-xs text-red-500"></span>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300">Work Location <span class="text-red-500">*</span></label>
+<div class="flex items-center gap-6 h-[42px] @(ViewData.ModelState["WorkLocation"]?.Errors.Count > 0 ? "border-2 border-red-500 rounded-lg p-2" : "")">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input asp-for="WorkLocation" class="size-4 text-primary focus:ring-primary bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-700" value="Office" type="radio" checked />
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400 group-hover:text-white transition-colors">Office</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input asp-for="WorkLocation" class="size-4 text-primary focus:ring-primary bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-700" value="Work From Home" type="radio" />
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400 group-hover:text-white transition-colors">Work From Home</span>
+</label>
+</div>
+<span asp-validation-for="WorkLocation" class="text-xs text-red-500"></span>
+</div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-2">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300">Priority <span class="text-red-500">*</span></label>
+<select asp-for="Priority" class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2.5 text-sm focus:ring-primary focus:border-primary @(ViewData.ModelState["Priority"]?.Errors.Count > 0 ? "border-red-500" : "")">
+<option value="Low">Low</option>
+<option value="Medium">Medium</option>
+<option value="High">High</option>
+<option value="Critical">Critical</option>
+</select>
+<span asp-validation-for="Priority" class="text-xs text-red-500"></span>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300">Department <span class="text-red-500">*</span></label>
+<input asp-for="Department" class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2.5 text-sm focus:ring-primary focus:border-primary @(ViewData.ModelState["Department"]?.Errors.Count > 0 ? "border-red-500" : "")" placeholder="e.g., Finance / HR / IT" type="text" />
+<span asp-validation-for="Department" class="text-xs text-red-500"></span>
+</div>
+</div>
+
+<div class="space-y-2">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300">Description <span class="text-red-500">*</span></label>
+<div class="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
+<div class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-700 p-2 flex gap-1">
+<button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">format_bold</span>
+</button>
+<button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">format_italic</span>
+</button>
+<button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">format_list_bulleted</span>
+</button>
+<button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">link</span>
+</button>
+<button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">image</span>
+</button>
+</div>
+<textarea asp-for="Description" class="w-full bg-slate-50 dark:bg-slate-900 border-none px-4 py-3 text-sm focus:ring-0 min-h-[150px] placeholder:text-slate-500 @(ViewData.ModelState["Description"]?.Errors.Count > 0 ? "border-2 border-red-500" : "")" placeholder="Please describe the issue in detail..."></textarea>
+</div>
+<span asp-validation-for="Description" class="text-xs text-red-500"></span>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-2">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                                        Team Viewer ID
+                                        <span class="material-symbols-outlined text-[16px] text-slate-500 cursor-help" title="Needed for remote troubleshooting">info</span>
+                                        <span class="text-red-500">*</span>
+</label>
+<input name="TeamViewerId" value="" autocomplete="off" class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2.5 text-sm focus:ring-primary focus:border-primary @(ViewData.ModelState["TeamViewerId"]?.Errors.Count > 0 ? "border-red-500" : "")" placeholder="Enter ID" type="text"/>
+<span asp-validation-for="TeamViewerId" class="text-xs text-red-500"></span>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300">Team Viewer Password <span class="text-red-500">*</span></label>
+<input name="TeamViewerPassword" value="" autocomplete="off" class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2.5 text-sm focus:ring-primary focus:border-primary @(ViewData.ModelState["TeamViewerPassword"]?.Errors.Count > 0 ? "border-red-500" : "")" placeholder="••••••••" type="password"/>
+<span asp-validation-for="TeamViewerPassword" class="text-xs text-red-500"></span>
+</div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-2">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300">Contact Number <span class="text-red-500">*</span></label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">call</span>
+<input asp-for="ContactNumber" class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:ring-primary focus:border-primary @(ViewData.ModelState["ContactNumber"]?.Errors.Count > 0 ? "border-red-500" : "")" placeholder="+1 (555) 000-0000" type="tel"/>
+</div>
+<span asp-validation-for="ContactNumber" class="text-xs text-red-500"></span>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300">Email ID <span class="text-red-500">*</span></label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">mail</span>
+<input asp-for="ContactEmail" class="w-full bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:ring-primary focus:border-primary @(ViewData.ModelState["ContactEmail"]?.Errors.Count > 0 ? "border-red-500" : "")" placeholder="alex.morgan@enterprise.com" type="email"/>
+</div>
+<span asp-validation-for="ContactEmail" class="text-xs text-red-500"></span>
+</div>
+</div>
+
+<div class="space-y-2">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300">Attachments</label>
+<div class="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-8 text-center bg-slate-50/30 dark:bg-slate-900/10 hover:border-primary/50 hover:bg-primary/5 transition-all">
+<div class="size-12 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
+<span class="material-symbols-outlined text-slate-500">upload_file</span>
+</div>
+<p class="text-sm font-bold">Upload files</p>
+<p class="text-xs text-slate-500 mt-1">PNG, JPG, PDF, or LOG files (Max 10MB)</p>
+<input asp-for="Attachments" type="file" multiple class="mt-4 block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 dark:file:bg-slate-800 dark:file:text-slate-200" data-val="false" />
+</div>
+</div>
+
+<div class="flex items-center justify-end gap-4 pt-6 border-t border-slate-100 dark:border-slate-800">
+<button type="button" class="px-6 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors" onclick="clearForm()">
+                                    Discard
+                                </button>
+
+<script>
+function clearForm() {
+    // Clear all form fields
+    document.querySelector('form').reset();
     
-    <div class="space-y-2">
-        <label asp-for="Subject" class="text-sm font-bold text-slate-700 dark:text-slate-300"></label>
-        <input asp-for="Subject" 
-               class="w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg py-2.5 px-4 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all text-slate-900 dark:text-white placeholder:text-slate-400" 
-               placeholder="e.g., Cannot access internal VPN from remote office" 
-               type="text"/>
-        <span asp-validation-for="Subject" class="validation-error"></span>
-    </div>
+    // Remove all validation error messages
+    document.querySelectorAll('span[data-valmsg-for]').forEach(span => {
+        span.textContent = '';
+    });
+    
+    // Remove red borders from all fields
+    document.querySelectorAll('input, select, textarea').forEach(field => {
+        field.classList.remove('border-red-500', 'border-2', 'border-red-500');
+        if (field.tagName === 'TEXTAREA') {
+            field.classList.add('border-none');
+        } else {
+            field.classList.remove('border-2');
+        }
+    });
+    
+    // Remove red border from work location container
+    const workLocationContainer = document.querySelector('input[name="WorkLocation"]').closest('.space-y-2');
+    if (workLocationContainer) {
+        workLocationContainer.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.classList.remove('border-red-500');
+            radio.classList.add('border-slate-200', 'dark:border-slate-700');
+        });
+    }
+    
+    // Clear validation summary if it exists
+    const validationSummary = document.querySelector('.validation-summary-errors');
+    if (validationSummary) {
+        validationSummary.remove();
+    }
+}
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="space-y-2">
-            <label asp-for="Department" class="text-sm font-bold text-slate-700 dark:text-slate-300"></label>
-            <select asp-for="Department" 
-                    class="w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg py-2.5 px-4 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all text-slate-900 dark:text-white">
-                <option value="">Select Department</option>
-                <option value="hr">Human Resources</option>
-                <option value="engineering">Engineering</option>
-                <option value="finance">Finance</option>
-                <option value="marketing">Marketing</option>
-                <option value="sales">Sales</option>
-            </select>
-        </div>
-        <div class="space-y-2">
-            <label asp-for="Category" class="text-sm font-bold text-slate-700 dark:text-slate-300"></label>
-            <select asp-for="Category" 
-                    class="w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg py-2.5 px-4 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all text-slate-900 dark:text-white">
-                <option value="">Select Category</option>
-                <option value="hardware">Hardware Issue</option>
-                <option value="software">Software / Application</option>
-                <option value="network">Network & Connectivity</option>
-                <option value="access">Access & Permissions</option>
-                <option value="other">General Request</option>
-            </select>
-        </div>
-    </div>
+// Add event listeners to clear validation errors when user starts typing
+document.addEventListener('DOMContentLoaded', function() {
+    // Clear any client-side validation for attachments on page load
+    const attachmentsInput = document.querySelector('input[name="Attachments"]');
+    if (attachmentsInput) {
+        // Remove any data-val attributes that might trigger validation
+        attachmentsInput.removeAttribute('data-val');
+        attachmentsInput.removeAttribute('data-val-required');
+        attachmentsInput.removeAttribute('data-val-minlength');
+        
+        // Clear any existing validation messages for attachments
+        const attachmentValidation = document.querySelector('span[data-valmsg-for="Attachments"]');
+        if (attachmentValidation) {
+            attachmentValidation.textContent = '';
+            attachmentValidation.className = 'field-validation-valid';
+        }
+    }
+    
+    // Add form submit handler to debug and override validation
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            console.log('Form submission attempt');
+            
+            // Check if there are any validation errors
+            const validationErrors = document.querySelectorAll('.field-validation-error, .input-validation-error');
+            console.log('Validation errors found:', validationErrors.length);
+            
+            // Force submission by removing any client-side validation blocking
+            if (validationErrors.length === 0) {
+                console.log('No validation errors, allowing submission');
+                return true;
+            } else {
+                console.log('Validation errors present, checking if they are attachment-related');
+                // Allow submission if the only errors are for attachments (which is now optional)
+                const nonAttachmentErrors = Array.from(validationErrors).filter(error => {
+                    const forAttribute = error.getAttribute('data-valmsg-for');
+                    return forAttribute && forAttribute !== 'Attachments';
+                });
+                
+                if (nonAttachmentErrors.length === 0) {
+                    console.log('Only attachment validation errors found, allowing submission');
+                    // Clear attachment validation errors
+                    validationErrors.forEach(error => error.textContent = '');
+                    return true;
+                }
+            }
+        });
+    }
+    
+    // Handle input fields and textareas
+    document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="password"], textarea').forEach(field => {
+        field.addEventListener('input', function() {
+            clearFieldValidation(this);
+        });
+        field.addEventListener('focus', function() {
+            clearFieldValidation(this);
+        });
+    });
+    
+    // Handle select fields
+    document.querySelectorAll('select').forEach(field => {
+        field.addEventListener('change', function() {
+            clearFieldValidation(this);
+        });
+    });
+    
+    // Handle radio buttons (Work Location)
+    document.querySelectorAll('input[type="radio"]').forEach(field => {
+        field.addEventListener('change', function() {
+            const fieldName = this.getAttribute('name');
+            clearFieldValidationByName(fieldName);
+        });
+    });
+});
 
-    <div class="space-y-3">
-        <label asp-for="Priority" class="text-sm font-bold text-slate-700 dark:text-slate-300"></label>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <label class="relative flex items-center justify-center p-3 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-                <input asp-for="Priority" class="sr-only peer" type="radio" value="low"/>
-                <span class="text-xs font-bold text-slate-500 peer-checked:text-primary dark:peer-checked:text-emerald-400">Low</span>
-                <div class="absolute inset-0 border-2 border-transparent peer-checked:border-primary dark:peer-checked:border-primary rounded-lg pointer-events-none"></div>
-            </label>
-            <label class="relative flex items-center justify-center p-3 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-                <input asp-for="Priority" class="sr-only peer" type="radio" value="medium" checked/>
-                <span class="text-xs font-bold text-slate-500 peer-checked:text-primary dark:peer-checked:text-blue-400">Medium</span>
-                <div class="absolute inset-0 border-2 border-transparent peer-checked:border-primary dark:peer-checked:border-primary rounded-lg pointer-events-none"></div>
-            </label>
-            <label class="relative flex items-center justify-center p-3 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-                <input asp-for="Priority" class="sr-only peer" type="radio" value="high"/>
-                <span class="text-xs font-bold text-slate-500 peer-checked:text-primary dark:peer-checked:text-orange-400">High</span>
-                <div class="absolute inset-0 border-2 border-transparent peer-checked:border-primary dark:peer-checked:border-primary rounded-lg pointer-events-none"></div>
-            </label>
-            <label class="relative flex items-center justify-center p-3 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-                <input asp-for="Priority" class="sr-only peer" type="radio" value="critical"/>
-                <span class="text-xs font-bold text-slate-500 peer-checked:text-primary dark:peer-checked:text-red-500">Critical</span>
-                <div class="absolute inset-0 border-2 border-transparent peer-checked:border-primary dark:peer-checked:border-primary rounded-lg pointer-events-none"></div>
-            </label>
-        </div>
-        <span asp-validation-for="Priority" class="validation-error"></span>
-    </div>
+function clearFieldValidation(field) {
+    const fieldName = field.getAttribute('asp-for') || field.getAttribute('name');
+    if (fieldName) {
+        clearFieldValidationByName(fieldName);
+    }
+}
 
-    <div class="space-y-2">
-        <label asp-for="Description" class="text-sm font-bold text-slate-700 dark:text-slate-300"></label>
-        <div class="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-primary/50 transition-all">
-            <div class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-700 px-3 py-2 flex items-center gap-1">
-                <button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400" type="button">
-                    <span class="material-symbols-outlined text-[18px]">format_bold</span>
-                </button>
-                <button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400" type="button">
-                    <span class="material-symbols-outlined text-[18px]">format_italic</span>
-                </button>
-                <button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400" type="button">
-                    <span class="material-symbols-outlined text-[18px]">format_underlined</span>
-                </button>
-                <div class="w-px h-4 bg-slate-300 dark:bg-slate-600 mx-1"></div>
-                <button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400" type="button">
-                    <span class="material-symbols-outlined text-[18px]">format_list_bulleted</span>
-                </button>
-                <button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400" type="button">
-                    <span class="material-symbols-outlined text-[18px]">format_list_numbered</span>
-                </button>
-                <div class="w-px h-4 bg-slate-300 dark:bg-slate-600 mx-1"></div>
-                <button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400" type="button">
-                    <span class="material-symbols-outlined text-[18px]">link</span>
-                </button>
-                <button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400" type="button">
-                    <span class="material-symbols-outlined text-[18px]">image</span>
-                </button>
-                <button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded text-slate-600 dark:text-slate-400" type="button">
-                    <span class="material-symbols-outlined text-[18px]">code</span>
-                </button>
-            </div>
-            <textarea asp-for="Description" 
-                      class="w-full bg-white dark:bg-slate-800 border-none p-4 text-sm focus:ring-0 min-h-[200px] text-slate-900 dark:text-white placeholder:text-slate-400" 
-                      placeholder="Please provide as much information as possible, including screenshots if applicable..."></textarea>
-        </div>
-        <span asp-validation-for="Description" class="validation-error"></span>
-    </div>
-
-    <div class="space-y-2">
-        <label asp-for="Attachments" class="text-sm font-bold text-slate-700 dark:text-slate-300"></label>
-        <div class="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-8 flex flex-col items-center justify-center gap-3 bg-slate-50/50 dark:bg-slate-800/30 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group cursor-pointer">
-            <div class="size-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                <span class="material-symbols-outlined">cloud_upload</span>
-            </div>
-            <div class="text-center">
-                <p class="text-sm font-bold text-slate-900 dark:text-white">Click to upload or drag and drop</p>
-                <p class="text-xs text-slate-500 mt-1">Maximum file size: 25MB (Images, PDFs, Logs)</p>
-            </div>
-            <input asp-for="Attachments" class="hidden" multiple type="file"/>
-        </div>
-    </div>
-
-    <div class="flex items-center justify-end gap-4 pt-4 border-t border-slate-200 dark:border-slate-700 mt-8">
-        <a href="@Url.Action("MyTickets", "Ticket")" class="px-6 py-2.5 rounded-lg text-sm font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-            Discard
-        </a>
-        <button type="submit" class="px-8 py-2.5 bg-primary text-white rounded-lg text-sm font-bold shadow-lg hover:bg-primary/90 transition-all flex items-center gap-2">
-            <span class="material-symbols-outlined text-[20px]">send</span>
-            Submit Ticket
-        </button>
-    </div>
+function clearFieldValidationByName(fieldName) {
+    // Clear validation message for this field
+    const validationSpan = document.querySelector(`span[data-valmsg-for="${fieldName}"]`);
+    if (validationSpan) {
+        validationSpan.textContent = '';
+    }
+    
+    // Remove red border from the field
+    const field = document.querySelector(`[asp-for="${fieldName}"], [name="${fieldName}"]`);
+    if (field) {
+        field.classList.remove('border-red-500', 'border-2', 'border-red-500');
+    }
+    
+    // Special handling for Work Location
+    if (fieldName === 'WorkLocation') {
+        const workLocationContainer = document.querySelector('input[name="WorkLocation"]').closest('.space-y-2');
+        if (workLocationContainer) {
+            workLocationContainer.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.classList.remove('border-red-500');
+                radio.classList.add('border-slate-200', 'dark:border-slate-700');
+            });
+        }
+    }
+}
+</script>
+<button class="px-8 py-2.5 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all flex items-center gap-2" type="submit">
+                                    Submit Ticket
+                                    <span class="material-symbols-outlined text-[18px]">send</span>
+</button>
+</div>
 </form>
-
-<div class="flex flex-wrap items-center justify-between gap-4 py-8 mt-8 border-t border-slate-200 dark:border-slate-700">
-<div class="flex items-center gap-6">
-<div class="flex items-center gap-2">
-<span class="size-2 rounded-full bg-emerald-500"></span>
-<span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Support Core: Online</span>
 </div>
-<div class="flex items-center gap-2">
-<span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Average Response: ~2h</span>
-</div>
-</div>
-<p class="text-xs text-slate-400">© 2024 Enterprise IT Ticketing v4.2.0</p>
+<p class="text-center text-xs text-slate-500 mt-6">
+                        Estimated response time: <span class="text-primary font-bold">2-4 Hours</span> for standard priority.
+                    </p>
 </div>
 </div>
 </main>
 </div>
 
-<script>
-    // Handle file upload click
-    document.querySelector('.border-dashed').addEventListener('click', function() {
-        document.querySelector('input[type="file"]').click();
-    });
-
-    // Handle drag and drop
-    const dropZone = document.querySelector('.border-dashed');
-    
-    dropZone.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        this.classList.add('bg-slate-100', 'dark:bg-slate-700');
-    });
-    
-    dropZone.addEventListener('dragleave', function(e) {
-        e.preventDefault();
-        this.classList.remove('bg-slate-100', 'dark:bg-slate-700');
-    });
-    
-    dropZone.addEventListener('drop', function(e) {
-        e.preventDefault();
-        this.classList.remove('bg-slate-100', 'dark:bg-slate-700');
-        
-        const files = e.dataTransfer.files;
-        document.querySelector('input[type="file"]').files = files;
-        
-        // Update UI to show selected files
-        const fileNames = Array.from(files).map(f => f.name).join(', ');
-        const fileNameDisplay = this.querySelector('.text-center p:first-child');
-        if (files.length > 0) {
-            fileNameDisplay.textContent = `${files.length} file(s) selected: ${fileNames}`;
-        }
-    });
-</script>
-</body>
-</html>
+</body></html>

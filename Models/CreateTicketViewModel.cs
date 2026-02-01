@@ -17,14 +17,33 @@ namespace ITTicketingSystem.Models
         [Display(Name = "Priority Level")]
         public string Priority { get; set; } = "Medium";
 
+        [Required(ErrorMessage = "Department is required")]
         [Display(Name = "Department")]
-        public string? Department { get; set; }
+        public string Department { get; set; } = string.Empty;
 
+        [Required(ErrorMessage = "Issue category is required")]
         [Display(Name = "Issue Category")]
-        public string? Category { get; set; }
+        public string Category { get; set; } = string.Empty;
 
         [Display(Name = "Attachments")]
-        public List<IFormFile>? Attachments { get; set; } = new List<IFormFile>();
+        public List<IFormFile> Attachments { get; set; } = new List<IFormFile>();
+
+        [Required(ErrorMessage = "Work location is required")]
+        public string WorkLocation { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "TeamViewer ID is required")]
+        public string TeamViewerId { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "TeamViewer password is required")]
+        public string TeamViewerPassword { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Contact number is required")]
+        [Phone(ErrorMessage = "Please enter a valid contact number")]
+        public string ContactNumber { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Please enter a valid email address")]
+        public string ContactEmail { get; set; } = string.Empty;
 
         public string? ErrorMessage { get; set; }
 

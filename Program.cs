@@ -42,6 +42,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 var app = builder.Build();
 
+// Ensure database is created and seeded
+await ApplicationDbContext.EnsureDatabaseCreated(app.Services);
+
 app.UseStaticFiles();
 app.UseRouting();
 

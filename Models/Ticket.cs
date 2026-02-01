@@ -29,6 +29,21 @@ namespace ITTicketingSystem.Models
         [StringLength(50)]
         public string? Category { get; set; }
 
+        [StringLength(50)]
+        public string? WorkLocation { get; set; }
+
+        [StringLength(100)]
+        public string? TeamViewerId { get; set; }
+
+        [StringLength(100)]
+        public string? TeamViewerPassword { get; set; }
+
+        [StringLength(50)]
+        public string? ContactNumber { get; set; }
+
+        [StringLength(255)]
+        public string? ContactEmail { get; set; }
+
         [StringLength(255)]
         public string? Attachments { get; set; }
 
