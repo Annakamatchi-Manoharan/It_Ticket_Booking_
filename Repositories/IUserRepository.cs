@@ -11,5 +11,9 @@ namespace ITTicketingSystem.Repositories
         Task<bool> DeleteAsync(int id);
         Task<IEnumerable<User>> GetAllAsync();
         Task<bool> EmailExistsAsync(string email);
+        Task<IEnumerable<User>> GetAvailableEngineersAsync();
+        Task<User?> GetNextAvailableEngineerAsync();
+        Task<User?> GetNextAvailableEngineerRoundRobinAsync();
+        Task UpdateAvailabilityAsync(int userId, bool isAvailable);
     }
 }

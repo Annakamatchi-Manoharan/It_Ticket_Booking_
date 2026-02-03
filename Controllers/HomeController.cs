@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using ITTicketingSystem.Models;
 using ITTicketingSystem.Repositories;
+using System.Diagnostics;
 using System.Security.Claims;
 
 namespace ITTicketingSystem.Controllers
@@ -47,18 +48,28 @@ namespace ITTicketingSystem.Controllers
             }
             else if (userRole == "User")
             {
-                // For User role, show simplified dashboard
+                // For User role, show user-specific dashboard
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var userAllTickets = _ticketRepository.GetAllAsync().Result;
-                
-                // Get user-specific tickets (for demo, we'll use all tickets)
-                var userTickets = userAllTickets.ToList(); // In real app: .Where(t => t.CreatedById == userId)
-                var userPendingCount = userTickets.Count(t => t.Status == "Open" || t.Status == "In-Progress");
-                var userResolvedCount = userTickets.Count(t => t.Status == "Resolved");
-                
-                ViewBag.UserTicketsCount = userTickets.Count;
-                ViewBag.UserPendingCount = userPendingCount;
-                ViewBag.UserResolvedCount = userResolvedCount;
+                if (int.TryParse(userId, out int currentUserId))
+                {
+                    // Get tickets created by this specific user
+                    var userTickets = _ticketRepository.GetByUserIdAsync(currentUserId).Result.ToList();
+                    var totalTicketsCount = userTickets.Count;
+                    var userPendingTicketsCount = userTickets.Count(t => t.Status == "Open" || t.Status == "In-Progress");
+                    var resolvedTicketsCount = userTickets.Count(t => t.Status == "Resolved");
+                    
+                    ViewBag.TotalTicketsCount = totalTicketsCount;
+                    ViewBag.PendingTicketsCount = userPendingTicketsCount;
+                    ViewBag.ResolvedTicketsCount = resolvedTicketsCount;
+                    ViewBag.UserTickets = userTickets.Take(5).ToList(); // Show recent 5 tickets
+                }
+                else
+                {
+                    ViewBag.TotalTicketsCount = 0;
+                    ViewBag.PendingTicketsCount = 0;
+                    ViewBag.ResolvedTicketsCount = 0;
+                    ViewBag.UserTickets = new List<Ticket>();
+                }
                 
                 return View("UserDashboard");
             }
@@ -89,21 +100,29 @@ namespace ITTicketingSystem.Controllers
             
             // Get engineer-specific statistics
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var allTickets = _ticketRepository.GetAllAsync().Result;
-            
-            // For demo purposes, assign some tickets to the current user
-            // In a real app, you'd have an AssignedTo field in tickets
-            var assignedTickets = allTickets.Where(t => t.Status == "Open" || t.Status == "In-Progress").Take(5).ToList();
-            var assignedTicketsCount = assignedTickets.Count;
-            var pendingResponseCount = assignedTickets.Count(t => t.Status == "Open");
-            var slaBreachedCount = 0; // Would calculate based on SLA rules
-            var avgResolutionTime = "2.4h"; // Would calculate from actual data
-            
-            ViewBag.AssignedTickets = assignedTickets;
-            ViewBag.AssignedTicketsCount = assignedTicketsCount;
-            ViewBag.PendingResponseCount = pendingResponseCount;
-            ViewBag.SlaBreachedCount = slaBreachedCount;
-            ViewBag.AvgResolutionTime = avgResolutionTime;
+            if (int.TryParse(userId, out int currentUserId))
+            {
+                // Get only tickets assigned to this engineer
+                var assignedTickets = _ticketRepository.GetByAssignedToIdAsync(currentUserId).Result.ToList();
+                var assignedTicketsCount = assignedTickets.Count;
+                var pendingResponseCount = assignedTickets.Count(t => t.Status == "Open");
+                var slaBreachedCount = 0; // Would calculate based on SLA rules
+                var avgResolutionTime = "2.4h"; // Would calculate from actual data
+                
+                ViewBag.AssignedTickets = assignedTickets;
+                ViewBag.AssignedTicketsCount = assignedTicketsCount;
+                ViewBag.PendingResponseCount = pendingResponseCount;
+                ViewBag.SlaBreachedCount = slaBreachedCount;
+                ViewBag.AvgResolutionTime = avgResolutionTime;
+            }
+            else
+            {
+                ViewBag.AssignedTickets = new List<Ticket>();
+                ViewBag.AssignedTicketsCount = 0;
+                ViewBag.PendingResponseCount = 0;
+                ViewBag.SlaBreachedCount = 0;
+                ViewBag.AvgResolutionTime = "0h";
+            }
             
             return View("EngineerDashboard");
         }

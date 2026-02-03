@@ -147,22 +147,6 @@
 <header class="h-16 border-b border-slate-200 dark:border-slate-800 px-8 flex items-center justify-between bg-white dark:bg-[#101a22] z-10">
 <div class="flex items-center gap-6">
 <h2 class="text-lg font-bold tracking-tight">Dashboard Overview</h2>
-<div class="h-6 w-px bg-slate-200 dark:bg-slate-800"></div>
-<div class="flex items-center p-1 bg-slate-100 dark:bg-slate-800 rounded-lg">
-@{
-    var userRole = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;
-}
-@if (userRole == "Admin" || userRole == "Manager")
-{
-    <button class="px-4 py-1.5 text-xs font-bold bg-white dark:bg-slate-700 shadow-sm rounded text-primary transition-all">Admin</button>
-    <a href="@Url.Action("ManagerDashboard", "Home")" class="px-4 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">Manager</a>
-}
-@if (userRole == "Admin" || userRole == "Manager" || userRole == "Engineer")
-{
-    <a href="@Url.Action("EngineerDashboard", "Home")" class="px-4 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">Engineer</a>
-}
-<a href="@Url.Action("MyTickets", "Ticket")" class="px-4 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">User</a>
-</div>
 </div>
 <div class="flex items-center gap-4">
 <!-- Search -->

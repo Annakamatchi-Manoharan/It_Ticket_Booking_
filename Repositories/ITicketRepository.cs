@@ -6,6 +6,8 @@ namespace ITTicketingSystem.Repositories
     {
         Task<Ticket?> GetByIdAsync(int id);
         Task<Ticket> CreateAsync(Ticket ticket);
+        Task<Ticket> CreateWithAutoAssignmentAsync(Ticket ticket);
+        Task<List<Ticket>> AssignUnassignedTicketsToEngineerAsync(int engineerId);
         Task<Ticket> UpdateAsync(Ticket ticket);
         Task<IEnumerable<Ticket>> GetAllAsync();
         Task<IEnumerable<Ticket>> GetByUserIdAsync(int userId);

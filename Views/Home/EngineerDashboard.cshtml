@@ -47,6 +47,11 @@
             background: #334155;
             border-radius: 10px;
         }
+        #status-toggle:checked ~ .status-available { display: none; }
+        #status-toggle:not(:checked) ~ .status-off-duty { display: none; }
+        #status-toggle:checked ~ .toggle-dot { transform: translateX(100%); background-color: #ef4444; }
+        #status-toggle:not(:checked) ~ .toggle-bg { background-color: #10b981; }
+        #status-toggle:checked ~ .toggle-bg { background-color: #334155; }
     </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
@@ -94,16 +99,14 @@
             </div>
         </nav>
         <div class="p-4 border-t border-slate-800 space-y-4">
-            <div class="flex items-center gap-3 px-2 py-3 rounded-xl bg-slate-900/50">
+            <a href="@Url.Action("Logout", "Account")" class="flex items-center gap-3 px-2 py-3 rounded-xl bg-slate-900/50 hover:bg-slate-800/70 transition-colors">
                 <div class="size-10 rounded-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuArhuNpL6O2HO3VaecONI9ePl8kTsrXfeTFI5LK7BzENiLP-8MRM6RBuVTDIjQMSQfhpE8tBT_LEQLts5hq7bbIl70G3Cn252z3Wnc9-tJDv82BhN9lMhi2XXG1KZBLvk6yfQlKqy6snvgzooimixBWl2G8IrX_8JGKn7z5cetYKnh-EVvTcbY3t5MUbyRglLNYoPZ86kfrcumsVneTPH4HLO47tpNHhav1ks5bHqx9iVh8NfBJNRTGCGkfYSZsoZHVZ5xcU2Dr1AVd')"></div>
                 <div class="flex-1 overflow-hidden">
                     <p class="text-sm font-bold truncate">Alex Morgan</p>
                     <p class="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">IT Engineer</p>
                 </div>
-                <button class="text-slate-500 hover:text-white transition-colors">
-                    <span class="material-symbols-outlined text-sm">logout</span>
-                </button>
-            </div>
+                <span class="material-symbols-outlined text-sm text-slate-500 hover:text-white transition-colors">logout</span>
+            </a>
         </div>
     </aside>
     <main class="flex-1 flex flex-col bg-background-light dark:bg-background-dark overflow-hidden">
@@ -111,21 +114,21 @@
             <div class="flex items-center gap-6">
                 <h2 class="text-lg font-bold tracking-tight">Assigned Tickets</h2>
                 <div class="h-6 w-px bg-slate-200 dark:bg-slate-800"></div>
-                <div class="flex items-center p-1 bg-slate-100 dark:bg-slate-800 rounded-lg">
-@{
-    var userRole = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;
-}
-@if (userRole == "Admin" || userRole == "Manager")
-{
-    <a href="@Url.Action("Dashboard", "Home")" class="px-4 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">Admin</a>
-    <a href="@Url.Action("ManagerDashboard", "Home")" class="px-4 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">Manager</a>
-}
-@if (userRole == "Admin" || userRole == "Manager" || userRole == "Engineer")
-{
-    <button class="px-4 py-1.5 text-xs font-bold bg-white dark:bg-slate-700 shadow-sm rounded text-primary transition-all">Engineer</button>
-}
-<a href="@Url.Action("MyTickets", "Ticket")" class="px-4 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">User</a>
-</div>
+                <div class="flex items-center gap-3 px-4 py-1.5 bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-full">
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input class="sr-only peer" id="status-toggle" type="checkbox" checked/>
+                        <div class="toggle-bg w-9 h-5 bg-slate-300 dark:bg-slate-700 rounded-full transition-colors"></div>
+                        <div class="toggle-dot absolute left-[2px] top-[2px] bg-white w-4 h-4 rounded-full transition-transform"></div>
+                        <div class="status-available ml-3 flex items-center gap-2">
+                            <span class="size-2 rounded-full bg-green-500 animate-pulse"></span>
+                            <span class="text-xs font-bold text-green-500 uppercase tracking-wide">Available</span>
+                        </div>
+                        <div class="status-off-duty ml-3 flex items-center gap-2">
+                            <span class="size-2 rounded-full bg-red-500"></span>
+                            <span class="text-xs font-bold text-red-500 uppercase tracking-wide">Off Duty</span>
+                        </div>
+                    </label>
+                </div>
             </div>
             <div class="flex items-center gap-4">
                 <div class="relative group">
@@ -196,9 +199,14 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
-                            @if (ViewBag.AssignedTickets != null)
+                            @{
+                                var assignedTickets = ViewBag.AssignedTickets as IEnumerable<ITTicketingSystem.Models.Ticket>;
+                                var hasTickets = assignedTickets != null && assignedTickets.Any();
+                            }
+                            
+                            @if (hasTickets)
                             {
-                                @foreach (var ticket in ViewBag.AssignedTickets)
+                                @foreach (var ticket in assignedTickets)
                                 {
                                     <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors group">
                                         <td class="px-6 py-4">
@@ -216,7 +224,7 @@
                                         <td class="px-6 py-4">
                                             <div class="flex flex-col">
                                                 <span class="text-sm font-semibold">@ticket.Subject</span>
-                                                <span class="text-xs text-slate-500">@ticket.Category</span>
+                                                <span class="text-xs text-slate-500">@(ticket.Category ?? "General")</span>
                                             </div>
                                         </td>
                                         <td class="px-6 py-4">
@@ -224,6 +232,7 @@
                                                 <span class="size-2 rounded-full 
                                                     @(ticket.Status == "Open" ? "bg-blue-500" : 
                                                       ticket.Status == "In-Progress" ? "bg-amber-500" : 
+                                                      ticket.Status == "Assigned" ? "bg-green-500" :
                                                       ticket.Status == "Resolved" ? "bg-green-500" : "bg-slate-500")"></span>
                                                 @ticket.Status
                                             </span>
@@ -246,7 +255,19 @@
                             {
                                 <tr>
                                     <td colspan="6" class="px-6 py-12 text-center text-slate-500">
-                                        No assigned tickets found
+                                        <div class="flex flex-col items-center gap-3">
+                                            <span class="material-symbols-outlined text-4xl text-slate-300">assignment_turned_in</span>
+                                            <span class="text-lg font-medium">No assigned tickets</span>
+                                            <span class="text-sm">You're all caught up! New tickets will appear here when assigned to you.</span>
+                                            @if (assignedTickets == null)
+                                            {
+                                                <span class="text-xs text-amber-500 mt-2">Debug: ViewBag.AssignedTickets is null</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-xs text-blue-500 mt-2">Debug: Found @(assignedTickets.Count()) tickets but none displayed</span>
+                                            }
+                                        </div>
                                     </td>
                                 </tr>
                             }
@@ -330,7 +351,77 @@
                     }
                 });
             }
+
+            // Availability toggle functionality
+            const statusToggle = document.getElementById('status-toggle');
+            if (statusToggle) {
+                statusToggle.addEventListener('change', async function() {
+                    const isAvailable = !this.checked; // Inverted logic: checked = off duty
+                    
+                    try {
+                        const response = await fetch('@Url.Action("ToggleAvailability", "Ticket")', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                            },
+                            body: JSON.stringify({ isAvailable: isAvailable })
+                        });
+                        
+                        const result = await response.json();
+                        
+                        if (result.success) {
+                            // Show success message
+                            showNotification(result.message, 'success');
+                            
+                            // If going available and tickets were assigned, refresh the dashboard
+                            if (isAvailable && result.assignedTicketsCount > 0) {
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 2000); // Wait 2 seconds to show the notification before refresh
+                            }
+                            
+                            // If going off duty, optionally show overlay or disable certain features
+                            if (!isAvailable) {
+                                console.log('Engineer is now off duty');
+                            }
+                        } else {
+                            // Revert toggle on error
+                            this.checked = !this.checked;
+                            showNotification(result.message, 'error');
+                        }
+                    } catch (error) {
+                        // Revert toggle on error
+                        this.checked = !this.checked;
+                        showNotification('Error updating availability', 'error');
+                    }
+                });
+            }
         });
+
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 px-4 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300 ${
+                type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+            }`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
     </script>
 </body>
 </html>

@@ -32,6 +32,8 @@ namespace ITTicketingSystem.Models
 
         public bool IsActive { get; set; } = true;
 
+        public bool IsAvailable { get; set; } = false;
+
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public DateTime? LastLoginAt { get; set; }

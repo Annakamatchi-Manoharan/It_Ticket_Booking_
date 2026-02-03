@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS Users (
     LastName VARCHAR(100) NOT NULL,
     Role VARCHAR(50) DEFAULT 'User',
     IsActive BOOLEAN DEFAULT TRUE,
+    IsAvailable BOOLEAN DEFAULT FALSE,
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     LastLoginAt TIMESTAMP NULL
 );
@@ -48,8 +49,8 @@ INSERT INTO Users (Email, PasswordHash, FirstName, LastName, Role, IsActive) VAL
 ('alex.morgan@company.com', 'Password123!', 'Alex', 'Morgan', 'Engineer', TRUE);
 
 -- Insert sample tickets for testing
-INSERT INTO Tickets (Subject, Description, Priority, Status, Department, Category, CreatedById) VALUES
-('VPN Access Issue - London Branch', 'Cannot connect to VPN from London office. Getting authentication error.', 'Critical', 'Open', 'Engineering', 'Network', 1),
-('Outlook License Renewal', 'Need to renew Outlook license for new employees.', 'Medium', 'In-Progress', 'HR', 'Software', 2),
-('New Workstation Setup (HR)', 'Setup new workstation for HR department.', 'Low', 'Resolved', 'HR', 'Hardware', 3),
-('Database Connectivity Error', 'Application cannot connect to production database.', 'High', 'Open', 'Engineering', 'Software', 1);
+INSERT INTO Tickets (Subject, Description, Priority, Status, Department, Category, CreatedById, AssignedToId) VALUES
+('VPN Access Issue - London Branch', 'Cannot connect to VPN from London office. Getting authentication error.', 'Critical', 'Open', 'Engineering', 'Network', 1, NULL),
+('Outlook License Renewal', 'Need to renew Outlook license for new employees.', 'Medium', 'In-Progress', 'HR', 'Software', 2, NULL),
+('New Workstation Setup (HR)', 'Setup new workstation for HR department.', 'Low', 'Resolved', 'HR', 'Hardware', 3, NULL),
+('Database Connectivity Error', 'Application cannot connect to production database.', 'High', 'Open', 'Engineering', 'Software', 1, NULL);

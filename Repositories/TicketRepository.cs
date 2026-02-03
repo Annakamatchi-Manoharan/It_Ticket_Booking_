@@ -7,10 +7,12 @@ namespace ITTicketingSystem.Repositories
     public class TicketRepository : ITicketRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly IUserRepository _userRepository;
 
-        public TicketRepository(ApplicationDbContext context)
+        public TicketRepository(ApplicationDbContext context, IUserRepository userRepository)
         {
             _context = context;
+            _userRepository = userRepository;
         }
 
         public async Task<Ticket?> GetByIdAsync(int id)
@@ -26,6 +28,51 @@ namespace ITTicketingSystem.Repositories
             _context.Tickets.Add(ticket);
             await _context.SaveChangesAsync();
             return ticket;
+        }
+
+        public async Task<Ticket> CreateWithAutoAssignmentAsync(Ticket ticket)
+        {
+            // Auto-assign to available engineer using round-robin based on workload
+            var nextAvailableEngineer = await _userRepository.GetNextAvailableEngineerRoundRobinAsync();
+            
+            if (nextAvailableEngineer != null)
+            {
+                ticket.AssignedToId = nextAvailableEngineer.Id;
+                ticket.Status = "Assigned";
+            }
+            else
+            {
+                // No engineers available, keep as Open
+                ticket.Status = "Open";
+            }
+            
+            _context.Tickets.Add(ticket);
+            await _context.SaveChangesAsync();
+            return ticket;
+        }
+
+        public async Task<List<Ticket>> AssignUnassignedTicketsToEngineerAsync(int engineerId)
+        {
+            // Get all tickets that are not assigned to any engineer (either null AssignedToId or assigned to non-engineers)
+            var unassignedTickets = await _context.Tickets
+                .Where(t => (t.Status == "Open" || t.Status == "In-Progress") && 
+                           (t.AssignedToId == null || 
+                            !_context.Users.Any(u => u.Id == t.AssignedToId && u.Role == "Engineer")))
+                .OrderBy(t => t.CreatedAt) // Assign oldest tickets first
+                .ToListAsync();
+
+            var assignedTickets = new List<Ticket>();
+
+            foreach (var ticket in unassignedTickets)
+            {
+                ticket.AssignedToId = engineerId;
+                ticket.Status = "Assigned";
+                ticket.UpdatedAt = DateTime.UtcNow;
+                assignedTickets.Add(ticket);
+            }
+
+            await _context.SaveChangesAsync();
+            return assignedTickets;
         }
 
         public async Task<Ticket> UpdateAsync(Ticket ticket)

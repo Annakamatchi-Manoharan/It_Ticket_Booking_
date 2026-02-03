@@ -38,7 +38,7 @@
                         @if (User.Identity?.IsAuthenticated == true)
                         {
                             <span class="text-sm text-gray-600 dark:text-gray-300">Welcome, @User.Identity.Name</span>
-                            <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" class="inline">
+                            <form asp-area="" asp-controller="Account" asp-action="LogoutPost" method="post" class="inline">
                                 <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
                                     Logout
                                 </button>

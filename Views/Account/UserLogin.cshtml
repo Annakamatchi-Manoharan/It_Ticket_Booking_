@@ -1,0 +1,149 @@
+@model ITTicketingSystem.Models.LoginViewModel
+@{
+    ViewData["Title"] = "User Login - IT Support";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-white to-indigo-50 min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md">
+        <!-- Logo and Title -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center size-16 bg-blue-600 rounded-2xl mb-4">
+                <span class="material-symbols-outlined text-3xl text-white">support_agent</span>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-900 mb-2">User Support Portal</h1>
+            <p class="text-gray-600">Access your IT support tickets</p>
+        </div>
+
+        <!-- Login Form -->
+        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+            @if (!string.IsNullOrEmpty(Model?.ErrorMessage))
+            {
+                <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-red-500">error</span>
+                        <p class="text-red-700 text-sm font-medium">@Model.ErrorMessage</p>
+                    </div>
+                </div>
+            }
+
+            <form asp-action="UserLogin" method="post" class="space-y-6">
+                @Html.AntiForgeryToken()
+                
+                <div>
+                    <label asp-for="Email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">email</span>
+                        <input asp-for="Email" type="email" 
+                               class="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                               placeholder="your.email@company.com" required />
+                    </div>
+                    <span asp-validation-for="Email" class="text-red-500 text-sm mt-1 block"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">lock</span>
+                        <input asp-for="Password" type="password" id="password"
+                               class="pl-10 pr-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                               placeholder="Enter your password" required />
+                        <button type="button" onclick="togglePassword()" 
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
+                            <span class="material-symbols-outlined" id="toggleIcon">visibility</span>
+                        </button>
+                    </div>
+                    <span asp-validation-for="Password" class="text-red-500 text-sm mt-1 block"></span>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center">
+                        <input asp-for="RememberMe" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+                        <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                    </label>
+                    <a href="#" class="text-sm text-blue-600 hover:text-blue-700 transition-colors">Forgot password?</a>
+                </div>
+
+                <button type="submit" 
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined">login</span>
+                    Sign In as User
+                </button>
+            </form>
+
+            <!-- Alternative Login Options -->
+            <div class="mt-6 pt-6 border-t border-gray-200">
+                <div class="text-center text-sm text-gray-600 mb-4">
+                    Not a regular user? 
+                    <a href="@Url.Action("Login", "Account")" class="text-blue-600 hover:text-blue-700 font-medium transition-colors">
+                        Staff Login
+                    </a>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <a href="@Url.Action("Login", "Account")" 
+                       class="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm">
+                        <span class="material-symbols-outlined text-lg">admin_panel_settings</span>
+                        Admin
+                    </a>
+                    <a href="@Url.Action("Login", "Account")" 
+                       class="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm">
+                        <span class="material-symbols-outlined text-lg">engineering</span>
+                        Engineer
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help Section -->
+        <div class="mt-8 text-center">
+            <p class="text-sm text-gray-600">
+                Need help? 
+                <a href="#" class="text-blue-600 hover:text-blue-700 font-medium transition-colors">Contact IT Support</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.textContent = 'visibility_off';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.textContent = 'visibility';
+            }
+        }
+
+        // Clear error message on input
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', function() {
+                const errorDiv = document.querySelector('.bg-red-50');
+                if (errorDiv) {
+                    errorDiv.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

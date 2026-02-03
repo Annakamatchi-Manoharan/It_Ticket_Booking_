@@ -91,9 +91,9 @@ namespace ITTicketingSystem.Controllers
                 ticket.Attachments = string.Join(";", savedFiles);
             }
 
-            await _ticketRepository.CreateAsync(ticket);
+            await _ticketRepository.CreateWithAutoAssignmentAsync(ticket);
 
-            TempData["SuccessMessage"] = "Ticket completed successfully! Your ticket has been submitted and will be processed shortly.";
+            TempData["SuccessMessage"] = "Ticket created successfully! Your ticket has been submitted and will be processed shortly.";
 
             return RedirectToAction("MyTickets", "Ticket");
         }
@@ -205,6 +205,57 @@ namespace ITTicketingSystem.Controllers
             catch (Exception ex)
             {
                 return Json(new { success = false, message = "Error updating ticket: " + ex.Message });
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> ToggleAvailability(bool isAvailable)
+        {
+            try
+            {
+                var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (!int.TryParse(userIdClaim, out var userId))
+                {
+                    return Json(new { success = false, message = "User not found" });
+                }
+
+                await _userRepository.UpdateAvailabilityAsync(userId, isAvailable);
+                
+                // If engineer is becoming available, assign existing unassigned tickets
+                int assignedCount = 0;
+                if (isAvailable)
+                {
+                    var user = await _userRepository.GetByIdAsync(userId);
+                    if (user != null && user.Role == "Engineer")
+                    {
+                        // Get all unassigned tickets for debugging
+                        var allTickets = await _ticketRepository.GetAllAsync();
+                        var unassignedCount = allTickets.Count(t => 
+                            (t.Status == "Open" || t.Status == "In-Progress") && 
+                            (t.AssignedToId == null || 
+                             t.AssignedTo == null || 
+                             t.AssignedTo?.Role != "Engineer"));
+
+                        var assignedTickets = await _ticketRepository.AssignUnassignedTicketsToEngineerAsync(userId);
+                        assignedCount = assignedTickets.Count;
+                    }
+                }
+                
+                return Json(new { 
+                    success = true, 
+                    message = isAvailable ? 
+                        (assignedCount > 0 ? 
+                            $"You are now available and {assignedCount} ticket(s) have been assigned to you!" : 
+                            "You are now available (no pending tickets to assign)") : 
+                        "You are now off duty",
+                    isAvailable = isAvailable,
+                    assignedTicketsCount = assignedCount
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error updating availability: " + ex.Message });
             }
         }
 
