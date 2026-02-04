@@ -38,7 +38,7 @@ namespace ITTicketingSystem.Data
                 LastName = "User",
                 Role = "Admin",
                 IsActive = true,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.Now
             };
             context.Users.Add(adminUser);
 
@@ -51,16 +51,16 @@ namespace ITTicketingSystem.Data
                 LastName = "Rivera",
                 Role = "Manager",
                 IsActive = true,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.Now
             };
             context.Users.Add(managerUser);
 
             // Add sample users
             var sampleUsers = new[]
             {
-                new User { Email = "john.doe@company.com", PasswordHash = "Password123!", FirstName = "John", LastName = "Doe", Role = "User", IsActive = true, CreatedAt = DateTime.UtcNow },
-                new User { Email = "jane.smith@company.com", PasswordHash = "Password123!", FirstName = "Jane", LastName = "Smith", Role = "User", IsActive = true, CreatedAt = DateTime.UtcNow },
-                new User { Email = "mike.wilson@company.com", PasswordHash = "Password123!", FirstName = "Mike", LastName = "Wilson", Role = "Support", IsActive = true, CreatedAt = DateTime.UtcNow }
+                new User { Email = "john.doe@company.com", PasswordHash = "Password123!", FirstName = "John", LastName = "Doe", Role = "User", IsActive = true, CreatedAt = DateTime.Now },
+                new User { Email = "jane.smith@company.com", PasswordHash = "Password123!", FirstName = "Jane", LastName = "Smith", Role = "User", IsActive = true, CreatedAt = DateTime.Now },
+                new User { Email = "mike.wilson@company.com", PasswordHash = "Password123!", FirstName = "Mike", LastName = "Wilson", Role = "Support", IsActive = true, CreatedAt = DateTime.Now }
             };
             context.Users.AddRange(sampleUsers);
 
@@ -78,7 +78,7 @@ namespace ITTicketingSystem.Data
                     Department = "Engineering", 
                     Category = "Network", 
                     CreatedById = adminUser.Id,
-                    CreatedAt = DateTime.UtcNow
+                    CreatedAt = DateTime.Now
                 },
                 new Ticket 
                 { 
@@ -89,7 +89,7 @@ namespace ITTicketingSystem.Data
                     Department = "HR", 
                     Category = "Software", 
                     CreatedById = managerUser.Id,
-                    CreatedAt = DateTime.UtcNow
+                    CreatedAt = DateTime.Now
                 },
                 new Ticket 
                 { 
@@ -100,7 +100,7 @@ namespace ITTicketingSystem.Data
                     Department = "HR", 
                     Category = "Hardware", 
                     CreatedById = 3,
-                    CreatedAt = DateTime.UtcNow
+                    CreatedAt = DateTime.Now
                 },
                 new Ticket 
                 { 
@@ -111,7 +111,7 @@ namespace ITTicketingSystem.Data
                     Department = "Engineering", 
                     Category = "Software", 
                     CreatedById = adminUser.Id,
-                    CreatedAt = DateTime.UtcNow
+                    CreatedAt = DateTime.Now
                 }
             };
             context.Tickets.AddRange(sampleTickets);

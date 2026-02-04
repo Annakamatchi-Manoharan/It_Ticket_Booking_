@@ -10,10 +10,12 @@ namespace ITTicketingSystem.Controllers
     public class HomeController : Controller
     {
         private readonly ITicketRepository _ticketRepository;
+        private readonly IUserRepository _userRepository;
         
-        public HomeController(ITicketRepository ticketRepository)
+        public HomeController(ITicketRepository ticketRepository, IUserRepository userRepository)
         {
             _ticketRepository = ticketRepository;
+            _userRepository = userRepository;
         }
 
         public IActionResult Index()
@@ -102,6 +104,12 @@ namespace ITTicketingSystem.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (int.TryParse(userId, out int currentUserId))
             {
+                // Get user info including availability
+                var currentUser = _userRepository.GetByIdAsync(currentUserId).Result;
+                
+                // Debug: Log the loaded availability
+                System.Diagnostics.Debug.WriteLine($"EngineerDashboard - User {currentUserId} loaded with IsAvailable: {currentUser?.IsAvailable}");
+                
                 // Get only tickets assigned to this engineer
                 var assignedTickets = _ticketRepository.GetByAssignedToIdAsync(currentUserId).Result.ToList();
                 var assignedTicketsCount = assignedTickets.Count;
@@ -114,6 +122,10 @@ namespace ITTicketingSystem.Controllers
                 ViewBag.PendingResponseCount = pendingResponseCount;
                 ViewBag.SlaBreachedCount = slaBreachedCount;
                 ViewBag.AvgResolutionTime = avgResolutionTime;
+                ViewBag.UserIsAvailable = currentUser?.IsAvailable ?? false;
+                
+                // Debug: Log what's being sent to view
+                System.Diagnostics.Debug.WriteLine($"EngineerDashboard - ViewBag.UserIsAvailable: {ViewBag.UserIsAvailable}");
             }
             else
             {
@@ -122,6 +134,7 @@ namespace ITTicketingSystem.Controllers
                 ViewBag.PendingResponseCount = 0;
                 ViewBag.SlaBreachedCount = 0;
                 ViewBag.AvgResolutionTime = "0h";
+                ViewBag.UserIsAvailable = false;
             }
             
             return View("EngineerDashboard");

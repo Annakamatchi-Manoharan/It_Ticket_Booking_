@@ -62,7 +62,7 @@ namespace ITTicketingSystem.Services
             var user = await _userRepository.GetByIdAsync(userId);
             if (user != null)
             {
-                user.LastLoginAt = DateTime.UtcNow;
+                user.LastLoginAt = DateTime.Now;
                 await _userRepository.UpdateAsync(user);
             }
         }

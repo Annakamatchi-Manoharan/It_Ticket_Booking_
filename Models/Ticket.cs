@@ -47,7 +47,7 @@ namespace ITTicketingSystem.Models
         [StringLength(255)]
         public string? Attachments { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public DateTime? UpdatedAt { get; set; }
 

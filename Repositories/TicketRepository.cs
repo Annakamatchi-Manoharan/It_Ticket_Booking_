@@ -39,11 +39,17 @@ namespace ITTicketingSystem.Repositories
             {
                 ticket.AssignedToId = nextAvailableEngineer.Id;
                 ticket.Status = "Assigned";
+                
+                // Debug: Log successful assignment
+                System.Diagnostics.Debug.WriteLine($"Ticket {ticket.Id} assigned to engineer {nextAvailableEngineer.Id} ({nextAvailableEngineer.Email})");
             }
             else
             {
                 // No engineers available, keep as Open
                 ticket.Status = "Open";
+                
+                // Debug: Log no available engineers
+                System.Diagnostics.Debug.WriteLine($"Ticket {ticket.Id} created but no engineers available - status set to Open");
             }
             
             _context.Tickets.Add(ticket);
@@ -67,7 +73,7 @@ namespace ITTicketingSystem.Repositories
             {
                 ticket.AssignedToId = engineerId;
                 ticket.Status = "Assigned";
-                ticket.UpdatedAt = DateTime.UtcNow;
+                ticket.UpdatedAt = DateTime.Now;
                 assignedTickets.Add(ticket);
             }
 

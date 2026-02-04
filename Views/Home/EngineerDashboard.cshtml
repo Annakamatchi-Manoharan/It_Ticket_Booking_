@@ -116,17 +116,30 @@
                 <div class="h-6 w-px bg-slate-200 dark:bg-slate-800"></div>
                 <div class="flex items-center gap-3 px-4 py-1.5 bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-full">
                     <label class="relative inline-flex items-center cursor-pointer">
-                        <input class="sr-only peer" id="status-toggle" type="checkbox" checked/>
-                        <div class="toggle-bg w-9 h-5 bg-slate-300 dark:bg-slate-700 rounded-full transition-colors"></div>
-                        <div class="toggle-dot absolute left-[2px] top-[2px] bg-white w-4 h-4 rounded-full transition-transform"></div>
-                        <div class="status-available ml-3 flex items-center gap-2">
-                            <span class="size-2 rounded-full bg-green-500 animate-pulse"></span>
-                            <span class="text-xs font-bold text-green-500 uppercase tracking-wide">Available</span>
-                        </div>
-                        <div class="status-off-duty ml-3 flex items-center gap-2">
-                            <span class="size-2 rounded-full bg-red-500"></span>
-                            <span class="text-xs font-bold text-red-500 uppercase tracking-wide">Off Duty</span>
-                        </div>
+                        <input type="checkbox" id="status-toggle" class="sr-only peer" @(ViewBag.UserIsAvailable != null && (bool)ViewBag.UserIsAvailable ? "checked" : "")>
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                            <div id="status-display" class="flex items-center gap-2">
+                                @{
+                                    var userRole = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;
+                                    var isAvailable = ViewBag.UserIsAvailable != null && (bool)ViewBag.UserIsAvailable;
+                                }
+                                @if (isAvailable)
+                                {
+                                    <div class="status-available flex items-center gap-2">
+                                        <span class="status-dot size-2 rounded-full bg-green-500 animate-pulse"></span>
+                                        <span class="status-text text-xs font-bold text-green-500 uppercase tracking-wide">Available</span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="status-off-duty flex items-center gap-2">
+                                        <span class="status-dot size-2 rounded-full bg-red-500"></span>
+                                        <span class="status-text text-xs font-bold text-red-500 uppercase tracking-wide">Off Duty</span>
+                                    </div>
+                                }
+                            </div>
+                        </span>
                     </label>
                 </div>
             </div>
@@ -259,14 +272,6 @@
                                             <span class="material-symbols-outlined text-4xl text-slate-300">assignment_turned_in</span>
                                             <span class="text-lg font-medium">No assigned tickets</span>
                                             <span class="text-sm">You're all caught up! New tickets will appear here when assigned to you.</span>
-                                            @if (assignedTickets == null)
-                                            {
-                                                <span class="text-xs text-amber-500 mt-2">Debug: ViewBag.AssignedTickets is null</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="text-xs text-blue-500 mt-2">Debug: Found @(assignedTickets.Count()) tickets but none displayed</span>
-                                            }
                                         </div>
                                     </td>
                                 </tr>
@@ -355,8 +360,14 @@
             // Availability toggle functionality
             const statusToggle = document.getElementById('status-toggle');
             if (statusToggle) {
+                // Store initial state to prevent unwanted changes
+                const initialState = statusToggle.checked;
+                
                 statusToggle.addEventListener('change', async function() {
-                    const isAvailable = !this.checked; // Inverted logic: checked = off duty
+                    const isAvailable = !this.checked; // Inverted logic: checked = off duty, unchecked = available
+                    
+                    // Update status display immediately
+                    updateStatusDisplay(!isAvailable);
                     
                     try {
                         const response = await fetch('@Url.Action("ToggleAvailability", "Ticket")', {
@@ -388,14 +399,46 @@
                         } else {
                             // Revert toggle on error
                             this.checked = !this.checked;
+                            updateStatusDisplay(isAvailable);
                             showNotification(result.message, 'error');
                         }
                     } catch (error) {
                         // Revert toggle on error
                         this.checked = !this.checked;
+                        updateStatusDisplay(isAvailable);
                         showNotification('Error updating availability', 'error');
                     }
                 });
+            }
+            
+            // Function to update status display
+            function updateStatusDisplay(isAvailable) {
+                const statusDisplay = document.getElementById('status-display');
+                const statusContainer = statusDisplay?.parentElement; // Get the span container
+                
+                if (statusDisplay && statusContainer) {
+                    if (isAvailable) {
+                        // Update status display
+                        statusDisplay.innerHTML = `
+                            <div class="status-available flex items-center gap-2">
+                                <span class="status-dot size-2 rounded-full bg-green-500 animate-pulse"></span>
+                                <span class="status-text text-xs font-bold text-green-500 uppercase tracking-wide">Available</span>
+                            </div>
+                        `;
+                        // Update container to normal color
+                        statusContainer.className = 'ml-3 text-sm font-medium text-gray-900 dark:text-gray-300';
+                    } else {
+                        // Update status display
+                        statusDisplay.innerHTML = `
+                            <div class="status-off-duty flex items-center gap-2">
+                                <span class="status-dot size-2 rounded-full bg-red-500"></span>
+                                <span class="status-text text-xs font-bold text-red-500 uppercase tracking-wide">Off Duty</span>
+                            </div>
+                        `;
+                        // Update container to red color
+                        statusContainer.className = 'ml-3 text-sm font-medium text-red-600 dark:text-red-400';
+                    }
+                }
             }
         });
 

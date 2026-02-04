@@ -15,8 +15,24 @@ namespace ITTicketingSystem.Repositories
 
         public async Task<User?> GetByEmailAsync(string email)
         {
-            return await _context.Users
+            var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+            
+            // If user is an engineer and just logged in, set them to available
+            if (user != null && user.Role == "Engineer")
+            {
+                user.IsAvailable = true;
+                user.LastLoginAt = DateTime.Now;
+                await _context.SaveChangesAsync();
+            }
+            else if (user != null)
+            {
+                // Update last login for other roles
+                user.LastLoginAt = DateTime.Now;
+                await _context.SaveChangesAsync();
+            }
+            
+            return user;
         }
 
         public async Task<User?> GetByIdAsync(int id)

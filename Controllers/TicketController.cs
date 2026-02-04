@@ -55,7 +55,7 @@ namespace ITTicketingSystem.Controllers
                 ContactEmail = model.ContactEmail,
                 CreatedById = userId,
                 Status = "Open",
-                CreatedAt = DateTime.Now // Use current application clock time
+                CreatedAt = DateTime.Now
             };
 
             if (model.Attachments != null && model.Attachments.Count > 0)
@@ -91,9 +91,18 @@ namespace ITTicketingSystem.Controllers
                 ticket.Attachments = string.Join(";", savedFiles);
             }
 
+            // Debug: Check available engineers before assignment
+            var availableEngineers = await _userRepository.GetAvailableEngineersAsync();
+            var availableEngineersList = availableEngineers.ToList();
+            var nextEngineer = await _userRepository.GetNextAvailableEngineerRoundRobinAsync();
+
             await _ticketRepository.CreateWithAutoAssignmentAsync(ticket);
 
-            TempData["SuccessMessage"] = "Ticket created successfully! Your ticket has been submitted and will be processed shortly.";
+            // Debug: Check ticket after assignment
+            var createdTicket = await _ticketRepository.GetByIdAsync(ticket.Id);
+
+            TempData["SuccessMessage"] = $"Ticket created successfully! Your ticket #{ticket.Id} has been submitted and will be processed shortly. " +
+                $"Available engineers: {availableEngineersList.Count}, Assigned to: {createdTicket?.AssignedToId}";
 
             return RedirectToAction("MyTickets", "Ticket");
         }
@@ -220,7 +229,14 @@ namespace ITTicketingSystem.Controllers
                     return Json(new { success = false, message = "User not found" });
                 }
 
+                // Debug: Log the received value
+                System.Diagnostics.Debug.WriteLine($"ToggleAvailability called with isAvailable: {isAvailable} for user: {userId}");
+
                 await _userRepository.UpdateAvailabilityAsync(userId, isAvailable);
+                
+                // Debug: Verify the update
+                var updatedUser = await _userRepository.GetByIdAsync(userId);
+                System.Diagnostics.Debug.WriteLine($"After update - User {userId} IsAvailable: {updatedUser?.IsAvailable}");
                 
                 // If engineer is becoming available, assign existing unassigned tickets
                 int assignedCount = 0;
