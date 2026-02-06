@@ -5,7 +5,6 @@ using ITTicketingSystem.Repositories;
 using System.Security.Claims;
 using System.Linq;
 using System.Collections.Generic;
-
 namespace ITTicketingSystem.Controllers
 {
     public class TicketController : Controller
