@@ -1,0 +1,352 @@
+@model ITTicketingSystem.Models.TeamOverviewViewModel
+@{
+    ViewData["Title"] = "Team Overview";
+    Layout = null;
+    var loggedInUserName = User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value
+        ?? User.Identity?.Name
+        ?? "User";
+    var loggedInUserRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value
+        ?? "User";
+}
+
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Team Overview - IT Ticketing System</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1392ec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101a22",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="flex h-screen overflow-hidden">
+    <aside class="w-72 flex-shrink-0 bg-[#0b1217] border-r border-slate-800 flex flex-col h-full fixed left-0 top-0 z-50">
+        <div class="p-6 flex items-center justify-between border-b border-slate-800">
+            <div class="flex items-center gap-3">
+                <div class="size-10 bg-primary rounded-lg flex items-center justify-center text-white">
+                    <span class="material-symbols-outlined text-2xl">confirmation_number</span>
+                </div>
+                <div>
+                    <h1 class="text-sm font-bold leading-tight">Enterprise IT</h1>
+                    <p class="text-[11px] text-slate-400 uppercase tracking-widest font-semibold">Support Suite</p>
+                </div>
+            </div>
+            <button class="text-slate-400 hover:text-white transition-colors">
+                <span class="material-symbols-outlined">menu_open</span>
+            </button>
+        </div>
+        <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-8 custom-scrollbar">
+            <div class="space-y-1">
+                <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Main</p>
+            </div>
+            <div class="space-y-1">
+                <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">IT Operations</p>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all" href="@Url.Action("EngineerDashboard", "Home")">
+                    <span class="material-symbols-outlined text-[22px]">assignment_turned_in</span>
+                    <span class="text-sm font-medium">Assigned Tickets</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all" href="#">
+                    <span class="material-symbols-outlined text-[22px]">auto_stories</span>
+                    <span class="text-sm font-medium">Knowledge Base</span>
+                </a>
+            </div>
+            <div class="space-y-1">
+                <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Management</p>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary border border-primary/20" href="@Url.Action("TeamOverview", "Home")">
+                    <span class="material-symbols-outlined text-[22px]">groups</span>
+                    <span class="text-sm font-semibold">Team Overview</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all" href="#">
+                    <span class="material-symbols-outlined text-[22px]">monitoring</span>
+                    <span class="text-sm font-medium">Reports &amp; Analytics</span>
+                </a>
+            </div>
+        </nav>
+        <div class="p-4 border-t border-slate-800 space-y-4">
+            <div class="flex items-center gap-3 px-2 py-3 rounded-xl bg-slate-900/50">
+                <div class="size-10 rounded-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuArhuNpL6O2HO3VaecONI9ePl8kTsrXfeTFI5LK7BzENiLP-8MRM6RBuVTDIjQMSQfhpE8tBT_LEQLts5hq7bbIl70G3Cn252z3Wnc9-tJDv82BhN9lMhi2XXG1KZBLvk6yfQlKqy6snvgzooimixBWl2G8IrX_8JGKn7z5cetYKnh-EVvTcbY3t5MUbyRglLNYoPZ86kfrcumsVneTPH4HLO47tpNHhav1ks5bHqx9iVh8NfBJNRTGCGkfYSZsoZHVZ5xcU2Dr1AVd')"></div>
+                <div class="flex-1 overflow-hidden">
+                    <p class="text-sm font-bold truncate">@loggedInUserName</p>
+                    <p class="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">@loggedInUserRole</p>
+                </div>
+                <form asp-area="" asp-controller="Account" asp-action="LogoutPost" method="post" class="inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="text-slate-500 hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-sm">logout</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col bg-background-light dark:bg-background-dark overflow-hidden ml-72">
+        <header class="h-16 border-b border-slate-200 dark:border-slate-800 px-8 flex items-center justify-between bg-white dark:bg-[#101a22] z-10">
+            <div class="flex items-center gap-6">
+                <h2 class="text-lg font-bold tracking-tight">Team Overview</h2>
+            </div>
+        </header>
+        <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+        <header class="mb-10 flex flex-wrap justify-between items-end gap-4">
+            <div class="max-w-2xl">
+                <h2 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">Team Overview</h2>
+                <p class="mt-2 text-slate-500 dark:text-slate-400 text-lg">Create, validate, and manage system user accounts in one place.</p>
+            </div>
+        </header>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-700">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        <div class="grid grid-cols-1 gap-8">
+            <section class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
+                <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">person_add</span>
+                    <h3 class="text-lg font-bold">Create New User</h3>
+                </div>
+                <form asp-action="TeamOverview" asp-controller="Home" method="post" class="p-8" novalidate>
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                        <div class="space-y-2">
+                            <label asp-for="Name" class="text-sm font-semibold text-slate-700 dark:text-slate-300"></label>
+                            <input asp-for="Name" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600" placeholder="e.g. John Doe" required />
+                            <span asp-validation-for="Name" class="text-sm text-red-500"></span>
+                        </div>
+                        <div class="space-y-2">
+                            <label asp-for="Email" class="text-sm font-semibold text-slate-700 dark:text-slate-300"></label>
+                            <input asp-for="Email" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600" placeholder="john@company.com" required />
+                            <span asp-validation-for="Email" class="text-sm text-red-500"></span>
+                        </div>
+                        <div class="space-y-2">
+                            <label asp-for="Password" class="text-sm font-semibold text-slate-700 dark:text-slate-300"></label>
+                            <input asp-for="Password" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" required minlength="6" />
+                            <span asp-validation-for="Password" class="text-sm text-red-500"></span>
+                        </div>
+                        <div class="space-y-2">
+                            <label asp-for="ConfirmPassword" class="text-sm font-semibold text-slate-700 dark:text-slate-300"></label>
+                            <input asp-for="ConfirmPassword" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" required minlength="6" />
+                            <span asp-validation-for="ConfirmPassword" class="text-sm text-red-500"></span>
+                        </div>
+                        <div class="space-y-2 md:col-span-2">
+                            <label asp-for="Role" class="text-sm font-semibold text-slate-700 dark:text-slate-300"></label>
+                            <select asp-for="Role" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all appearance-none cursor-pointer">
+                                <option value="User">Normal User</option>
+                                <option value="Engineer">IT Engineer</option>
+                                <option value="Manager">Manager</option>
+                                <option value="Admin">Admin</option>
+                            </select>
+                            <span asp-validation-for="Role" class="text-sm text-red-500"></span>
+                        </div>
+                    </div>
+                    <div class="mt-10 flex items-center gap-4 border-t border-slate-200 dark:border-slate-800 pt-8">
+                        <button class="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-lg font-bold transition-all shadow-lg shadow-primary/20" type="submit">
+                            Create User
+                        </button>
+                        <a class="px-8 py-3 rounded-lg font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all border border-transparent hover:border-slate-200 dark:hover:border-slate-700" href="@Url.Action("TeamOverview", "Home")">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </section>
+
+            <section class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
+                <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">badge</span>
+                        <h3 class="text-lg font-bold">User Directory</h3>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50 dark:bg-slate-950/50 text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">
+                            <tr>
+                                <th class="px-6 py-4">Name</th>
+                                <th class="px-6 py-4">Email</th>
+                                <th class="px-6 py-4">Role</th>
+                                <th class="px-6 py-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+                            @foreach (var user in Model.Users)
+                            {
+                                var initials = string.Concat(
+                                    (user.FirstName.FirstOrDefault() == default ? "" : user.FirstName[0].ToString()),
+                                    (user.LastName.FirstOrDefault() == default ? "" : user.LastName[0].ToString())
+                                ).ToUpperInvariant();
+                                if (Model.EditUserId == user.Id)
+                                {
+                                    <tr class="bg-slate-50 dark:bg-slate-800/50 align-top">
+                                        <td colspan="4" class="px-6 py-4">
+                                            <form asp-action="UpdateTeamUser" asp-controller="Home" method="post" class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start" novalidate>
+                                                @Html.AntiForgeryToken()
+                                                <input asp-for="EditUserId" type="hidden" />
+                                                <div class="md:col-span-3">
+                                                    <label asp-for="EditName" class="mb-1 block text-xs font-semibold text-slate-600 dark:text-slate-300"></label>
+                                                    <input asp-for="EditName" class="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary" />
+                                                    <span asp-validation-for="EditName" class="text-xs text-red-500"></span>
+                                                </div>
+                                                <div class="md:col-span-3">
+                                                    <label asp-for="EditEmail" class="mb-1 block text-xs font-semibold text-slate-600 dark:text-slate-300"></label>
+                                                    <input asp-for="EditEmail" placeholder="@user.Email" class="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary" />
+                                                    <span asp-validation-for="EditEmail" class="text-xs text-red-500"></span>
+                                                </div>
+                                                <div class="md:col-span-2">
+                                                    <label asp-for="EditPassword" class="mb-1 block text-xs font-semibold text-slate-600 dark:text-slate-300"></label>
+                                                    <input asp-for="EditPassword" class="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary" />
+                                                    <span asp-validation-for="EditPassword" class="text-xs text-red-500"></span>
+                                                </div>
+                                                <div class="md:col-span-2">
+                                                    <label asp-for="EditConfirmPassword" class="mb-1 block text-xs font-semibold text-slate-600 dark:text-slate-300"></label>
+                                                    <input asp-for="EditConfirmPassword" class="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary" />
+                                                    <span asp-validation-for="EditConfirmPassword" class="text-xs text-red-500"></span>
+                                                </div>
+                                                <div class="md:col-span-2">
+                                                    <label asp-for="EditRole" class="mb-1 block text-xs font-semibold text-slate-600 dark:text-slate-300"></label>
+                                                    <select asp-for="EditRole" class="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary">
+                                                        <option value="User">Normal User</option>
+                                                        <option value="Engineer">IT Engineer</option>
+                                                        <option value="Manager">Manager</option>
+                                                        <option value="Admin">Admin</option>
+                                                    </select>
+                                                    <span asp-validation-for="EditRole" class="text-xs text-red-500"></span>
+                                                </div>
+                                                <div class="md:col-span-12 flex justify-end gap-2 pt-2">
+                                                    <a class="rounded-lg border border-slate-200 dark:border-slate-700 px-4 py-2 text-sm font-semibold text-slate-600 dark:text-slate-300" href="@Url.Action("TeamOverview", "Home")">Cancel</a>
+                                                    <button class="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white" type="submit">Save</button>
+                                                </div>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">@initials</div>
+                                                <span class="font-semibold">@user.FullName</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 text-slate-600 dark:text-slate-400 text-sm">@user.Email</td>
+                                        <td class="px-6 py-4">
+                                            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">@user.Role</span>
+                                        </td>
+                                        <td class="px-6 py-4 text-right">
+                                            <div class="flex justify-end gap-2">
+                                                <a class="p-2 hover:bg-primary/10 text-primary rounded-lg transition-colors" href="@Url.Action("TeamOverview", "Home", new { editId = user.Id })" title="Edit">
+                                                    <i class="bi bi-pencil-square text-lg"></i>
+                                                </a>
+                                                <button class="delete-user-button p-2 hover:bg-red-500/10 text-red-500 rounded-lg transition-colors" type="button" title="Delete" data-user-id="@user.Id" data-user-name="@user.FullName">
+                                                    <i class="bi bi-trash text-lg"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="px-6 py-4 bg-slate-50 dark:bg-slate-950/50 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center">
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Showing @Model.Users.Count users</span>
+                </div>
+            </section>
+        </div>
+        </div>
+    </main>
+</div>
+<div id="deleteModal" class="fixed inset-0 z-[60] hidden items-center justify-center bg-slate-950/60 px-4">
+    <div class="w-full max-w-md rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl">
+        <div class="border-b border-slate-200 dark:border-slate-800 px-6 py-4">
+            <h3 class="text-lg font-bold">Delete User</h3>
+        </div>
+        <div class="px-6 py-5">
+            <p class="text-sm text-slate-600 dark:text-slate-300">Are you sure you want to delete <span id="deleteUserName" class="font-semibold text-slate-900 dark:text-slate-100"></span>?</p>
+            <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">This will soft delete the user by setting <code>IsActive</code> to <code>0</code>.</p>
+        </div>
+        <div class="flex justify-end gap-3 border-t border-slate-200 dark:border-slate-800 px-6 py-4">
+            <button id="cancelDeleteButton" class="rounded-lg border border-slate-200 dark:border-slate-700 px-4 py-2 text-sm font-semibold text-slate-600 dark:text-slate-300" type="button">Cancel</button>
+            <form asp-action="DeleteTeamUser" asp-controller="Home" method="post">
+                @Html.AntiForgeryToken()
+                <input id="deleteUserId" type="hidden" name="id" />
+                <button class="rounded-lg bg-red-500 px-4 py-2 text-sm font-semibold text-white" type="submit">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('deleteModal');
+        const deleteUserIdInput = document.getElementById('deleteUserId');
+        const deleteUserName = document.getElementById('deleteUserName');
+        const cancelDeleteButton = document.getElementById('cancelDeleteButton');
+        const deleteButtons = document.querySelectorAll('.delete-user-button');
+
+        function closeModal() {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            deleteUserIdInput.value = '';
+            deleteUserName.textContent = '';
+        }
+
+        deleteButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                deleteUserIdInput.value = this.dataset.userId;
+                deleteUserName.textContent = this.dataset.userName;
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            });
+        });
+
+        cancelDeleteButton.addEventListener('click', closeModal);
+
+        modal.addEventListener('click', function (event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+    });
+</script>
+</body>
+</html>

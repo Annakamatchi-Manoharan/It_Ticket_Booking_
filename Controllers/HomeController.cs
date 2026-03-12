@@ -4,6 +4,7 @@ using ITTicketingSystem.Models;
 using ITTicketingSystem.Repositories;
 using System.Diagnostics;
 using System.Security.Claims;
+using ITTicketingSystem.Services;
 
 namespace ITTicketingSystem.Controllers
 {
@@ -11,11 +12,13 @@ namespace ITTicketingSystem.Controllers
     {
         private readonly ITicketRepository _ticketRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IAuthenticationService _authenticationService;
         
-        public HomeController(ITicketRepository ticketRepository, IUserRepository userRepository)
+        public HomeController(ITicketRepository ticketRepository, IUserRepository userRepository, IAuthenticationService authenticationService)
         {
             _ticketRepository = ticketRepository;
             _userRepository = userRepository;
+            _authenticationService = authenticationService;
         }
 
         public IActionResult Index()
@@ -138,6 +141,206 @@ namespace ITTicketingSystem.Controllers
             }
             
             return View("EngineerDashboard");
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> TeamOverview(int? editId = null)
+        {
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+            if (userRole == "User")
+            {
+                return RedirectToAction("AccessDenied", "Account");
+            }
+
+            var users = (await _userRepository.GetAllAsync())
+                .Where(u => u.IsActive)
+                .ToList();
+
+            var model = new TeamOverviewViewModel
+            {
+                Users = users
+            };
+
+            if (editId.HasValue)
+            {
+                var editUser = await _userRepository.GetByIdAsync(editId.Value);
+                if (editUser != null && editUser.IsActive)
+                {
+                    model.EditUserId = editUser.Id;
+                    model.EditName = editUser.FullName.Replace(" -", "").Trim();
+                    model.EditEmail = editUser.Email;
+                    model.EditRole = editUser.Role ?? "User";
+                }
+            }
+
+            return View(model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TeamOverview(TeamOverviewViewModel model)
+        {
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+            if (userRole == "User")
+            {
+                return RedirectToAction("AccessDenied", "Account");
+            }
+
+            ModelState.Remove(nameof(model.EditName));
+            ModelState.Remove(nameof(model.EditEmail));
+            ModelState.Remove(nameof(model.EditPassword));
+            ModelState.Remove(nameof(model.EditConfirmPassword));
+            ModelState.Remove(nameof(model.EditRole));
+
+            var normalizedEmail = model.Email.Trim();
+            var activeUsers = (await _userRepository.GetAllAsync()).ToList();
+            var duplicateUser = activeUsers.FirstOrDefault(u =>
+                u.IsActive &&
+                string.Equals(u.Email, normalizedEmail, StringComparison.OrdinalIgnoreCase));
+
+            if (duplicateUser != null)
+            {
+                ModelState.AddModelError(nameof(model.Email), "This email already exists.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                model.Users = activeUsers
+                    .Where(u => u.IsActive)
+                    .ToList();
+                return View(model);
+            }
+
+            var nameParts = model.Name.Trim().Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
+            var firstName = nameParts.FirstOrDefault() ?? model.Name.Trim();
+            var lastName = nameParts.Length > 1 ? nameParts[1] : string.Empty;
+
+            var user = new User
+            {
+                FirstName = firstName,
+                LastName = string.IsNullOrWhiteSpace(lastName) ? "-" : lastName,
+                Email = normalizedEmail,
+                PasswordHash = await _authenticationService.HashPasswordAsync(model.Password),
+                Role = model.Role,
+                IsActive = true,
+                CreatedAt = DateTime.Now
+            };
+
+            await _userRepository.CreateAsync(user);
+
+            TempData["SuccessMessage"] = "User created successfully.";
+            return RedirectToAction(nameof(TeamOverview));
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateTeamUser(TeamOverviewViewModel model)
+        {
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+            if (userRole == "User")
+            {
+                return RedirectToAction("AccessDenied", "Account");
+            }
+
+            ModelState.Remove(nameof(model.Name));
+            ModelState.Remove(nameof(model.Email));
+            ModelState.Remove(nameof(model.Password));
+            ModelState.Remove(nameof(model.ConfirmPassword));
+            ModelState.Remove(nameof(model.Role));
+
+            if (!model.EditUserId.HasValue || model.EditUserId.Value <= 0)
+            {
+                return RedirectToAction(nameof(TeamOverview));
+            }
+
+            var existingRecord = await _userRepository.GetByIdAsync(model.EditUserId.Value);
+            if (existingRecord == null || !existingRecord.IsActive)
+            {
+                TempData["SuccessMessage"] = "User not found.";
+                return RedirectToAction(nameof(TeamOverview));
+            }
+
+            var activeUsers = (await _userRepository.GetAllAsync())
+                .Where(u => u.IsActive)
+                .ToList();
+
+            var normalizedEmail = string.IsNullOrWhiteSpace(model.EditEmail)
+                ? existingRecord.Email
+                : model.EditEmail.Trim();
+
+            var duplicateUser = activeUsers.FirstOrDefault(u =>
+                string.Equals(u.Email, normalizedEmail, StringComparison.OrdinalIgnoreCase) &&
+                u.Id != existingRecord.Id);
+
+            if (duplicateUser != null)
+            {
+                ModelState.AddModelError(nameof(model.EditEmail), "This email already exists.");
+            }
+
+            var isChangingPassword = !string.IsNullOrWhiteSpace(model.EditPassword) || !string.IsNullOrWhiteSpace(model.EditConfirmPassword);
+            if (!isChangingPassword)
+            {
+                ModelState.Remove(nameof(model.EditPassword));
+                ModelState.Remove(nameof(model.EditConfirmPassword));
+            }
+
+            if (isChangingPassword)
+            {
+                if (string.IsNullOrWhiteSpace(model.EditPassword))
+                {
+                    ModelState.AddModelError(nameof(model.EditPassword), "Password is required.");
+                }
+
+                if (string.IsNullOrWhiteSpace(model.EditConfirmPassword))
+                {
+                    ModelState.AddModelError(nameof(model.EditConfirmPassword), "Confirm password is required.");
+                }
+            }
+
+            if (!ModelState.IsValid)
+            {
+                model.Users = activeUsers;
+                return View("TeamOverview", model);
+            }
+
+            var nameParts = model.EditName.Trim().Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
+            existingRecord.FirstName = nameParts.FirstOrDefault() ?? model.EditName.Trim();
+            existingRecord.LastName = nameParts.Length > 1 ? nameParts[1] : "-";
+            existingRecord.Email = normalizedEmail;
+            existingRecord.Role = model.EditRole;
+
+            if (isChangingPassword)
+            {
+                existingRecord.PasswordHash = await _authenticationService.HashPasswordAsync(model.EditPassword);
+            }
+
+            await _userRepository.UpdateAsync(existingRecord);
+
+            TempData["SuccessMessage"] = "User updated successfully.";
+            return RedirectToAction(nameof(TeamOverview));
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteTeamUser(int id)
+        {
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+            if (userRole == "User")
+            {
+                return RedirectToAction("AccessDenied", "Account");
+            }
+
+            var deleted = await _userRepository.DeleteAsync(id);
+            if (deleted)
+            {
+                TempData["SuccessMessage"] = "User deleted successfully.";
+            }
+
+            return RedirectToAction(nameof(TeamOverview));
         }
 
         [Authorize]

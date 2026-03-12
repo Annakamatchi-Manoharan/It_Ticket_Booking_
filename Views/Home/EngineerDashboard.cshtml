@@ -1,6 +1,11 @@
 @{
     ViewData["Title"] = "Engineer Dashboard";
     Layout = null;
+    var loggedInUserName = User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value
+        ?? User.Identity?.Name
+        ?? "User";
+    var loggedInUserRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value
+        ?? "Engineer";
 }
 
 <!DOCTYPE html>
@@ -88,7 +93,7 @@
             </div>
             <div class="space-y-1">
                 <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Management</p>
-                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all" href="#">
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-white transition-all" href="@Url.Action("TeamOverview", "Home")">
                     <span class="material-symbols-outlined text-[22px]">groups</span>
                     <span class="text-sm font-medium">Team Overview</span>
                 </a>
@@ -102,8 +107,8 @@
             <a href="@Url.Action("Logout", "Account")" class="flex items-center gap-3 px-2 py-3 rounded-xl bg-slate-900/50 hover:bg-slate-800/70 transition-colors">
                 <div class="size-10 rounded-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuArhuNpL6O2HO3VaecONI9ePl8kTsrXfeTFI5LK7BzENiLP-8MRM6RBuVTDIjQMSQfhpE8tBT_LEQLts5hq7bbIl70G3Cn252z3Wnc9-tJDv82BhN9lMhi2XXG1KZBLvk6yfQlKqy6snvgzooimixBWl2G8IrX_8JGKn7z5cetYKnh-EVvTcbY3t5MUbyRglLNYoPZ86kfrcumsVneTPH4HLO47tpNHhav1ks5bHqx9iVh8NfBJNRTGCGkfYSZsoZHVZ5xcU2Dr1AVd')"></div>
                 <div class="flex-1 overflow-hidden">
-                    <p class="text-sm font-bold truncate">Alex Morgan</p>
-                    <p class="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">IT Engineer</p>
+                    <p class="text-sm font-bold truncate">@loggedInUserName</p>
+                    <p class="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">@loggedInUserRole</p>
                 </div>
                 <span class="material-symbols-outlined text-sm text-slate-500 hover:text-white transition-colors">logout</span>
             </a>
